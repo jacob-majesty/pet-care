@@ -1,5 +1,5 @@
 package com.majesty.pet_care.factory;
 
-public class VetFactory {
+public class VeterinarianFactory {
 
 }

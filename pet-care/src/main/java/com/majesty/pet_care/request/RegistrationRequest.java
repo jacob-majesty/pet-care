@@ -1,4 +1,4 @@
-package com.majesty.pet_care.factory;
+package com.majesty.pet_care.request;
 
 public class RegistrationRequest {
 
