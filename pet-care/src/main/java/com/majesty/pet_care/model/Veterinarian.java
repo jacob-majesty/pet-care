@@ -1,7 +1,6 @@
 package com.majesty.pet_care.model;
 
 import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.PrimaryKeyJoinColumn;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -16,7 +15,6 @@ import lombok.Setter;
 @PrimaryKeyJoinColumn(name = "vet_id")
 public class Veterinarian extends User {
 
-    //@GeneratedValue(strategy = jakarta.persistence.GenerationType.IDENTITY)
     private long id;
     private String specialization;
 
