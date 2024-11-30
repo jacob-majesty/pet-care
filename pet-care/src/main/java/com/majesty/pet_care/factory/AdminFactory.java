@@ -16,9 +16,9 @@ public class AdminFactory {
     private final AdminRepository adminRepository;
     private final UserAttributeMapper userAttributeMapper;
 
-    public Admin createAdmin(RegistrationRequest registrationRequest) {
+    public Admin createAdmin(RegistrationRequest request) {
         Admin admin = new Admin();
-        userAttributeMapper.setCommonAttributes(registrationRequest, admin);
+        userAttributeMapper.setCommonAttributes(request, admin);
         return adminRepository.save(admin);
         
     }

@@ -1,8 +1,11 @@
 package com.majesty.pet_care.service.user;
 
+import org.springframework.stereotype.Component;
+
 import com.majesty.pet_care.model.User;
 import com.majesty.pet_care.request.RegistrationRequest;
 
+@Component
 public class UserAttributeMapper {
 
     public void setCommonAttributes(RegistrationRequest source, User target) {
