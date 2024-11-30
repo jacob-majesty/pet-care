@@ -5,6 +5,7 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.Id;
 import jakarta.persistence.InheritanceType;
+import jakarta.persistence.Transient;
 import jakarta.persistence.Inheritance;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -31,5 +32,8 @@ public class User {
     private String password;
     private String UserType;
     private boolean isEnabled;
+
+    @Transient
+    private String specialization;
 
 }

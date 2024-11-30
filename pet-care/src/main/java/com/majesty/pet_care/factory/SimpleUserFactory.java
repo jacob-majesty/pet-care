@@ -1,16 +1,22 @@
 package com.majesty.pet_care.factory;
 
+import org.springframework.stereotype.Component;
+
 import com.majesty.pet_care.exception.UserAlreadyExistsException;
 import com.majesty.pet_care.model.User;
 import com.majesty.pet_care.repository.UserRepository;
 import com.majesty.pet_care.request.RegistrationRequest;
 
+import lombok.RequiredArgsConstructor;
+
+@RequiredArgsConstructor
+@Component
 public class SimpleUserFactory implements UserFactory {
 
-    private UserRepository userRepository;
-    private VeterinarianFactory veterinarianFactory;
-    private PatientFactory patientFactory;
-    private AdminFactory adminFactory;
+    private final UserRepository userRepository;
+    private final VeterinarianFactory veterinarianFactory;
+    private final PatientFactory patientFactory;
+    private final AdminFactory adminFactory;
 
     @Override
     public User createUser(RegistrationRequest registrationRequest) {

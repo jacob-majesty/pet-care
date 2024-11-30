@@ -1,5 +1,10 @@
-package com.majesty.pet_care.factory;
+package com.majesty.pet_care.exception;
 
-public class UserAlreadyExistsException {
 
+public class UserAlreadyExistsException extends RuntimeException{
+    public UserAlreadyExistsException(String message){
+        super(message);
+
+    }
+    
 }

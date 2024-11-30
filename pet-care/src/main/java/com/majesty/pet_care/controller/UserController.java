@@ -5,9 +5,12 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.majesty.pet_care.model.User;
-import com.majesty.pet_care.service.UserService;
+import com.majesty.pet_care.request.RegistrationRequest;
+import com.majesty.pet_care.service.user.UserService;
 
 import lombok.RequiredArgsConstructor;
+
+
 import org.springframework.web.bind.annotation.PostMapping;
 
 
@@ -19,8 +22,8 @@ public class UserController {
     private final UserService userService;
 
     @PostMapping
-    public void add(@RequestBody User user) {
-        userService.add(user);
+    public User add(@RequestBody RegistrationRequest request) {
+        return userService.add(request);
     }
 
 }
