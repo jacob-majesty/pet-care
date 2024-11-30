@@ -1,4 +1,4 @@
-package com.majesty.pet_care.service;
+package com.majesty.pet_care.service.user;
 
 import org.springframework.stereotype.Service;
 
