@@ -5,7 +5,6 @@ import org.springframework.web.bind.annotation.RequestBody;
 
 import com.majesty.pet_care.factory.UserFactory;
 import com.majesty.pet_care.model.User;
-import com.majesty.pet_care.repository.UserRepository;
 import com.majesty.pet_care.request.RegistrationRequest;
 
 import lombok.RequiredArgsConstructor;
@@ -14,7 +13,6 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class UserService {
 
-    private final UserRepository userRepository;
     private final UserFactory userFactory;
 
     public User add(@RequestBody RegistrationRequest request) {  
