@@ -1,4 +1,6 @@
 package com.majesty.pet_care.controller;
+import java.util.List;
+
 import org.apache.catalina.connector.Response;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -96,6 +98,11 @@ public class UserController {
             return ResponseEntity.status(Response.SC_INTERNAL_SERVER_ERROR).body(new ApiResponse(e.getMessage(), null));
             
         }
+    }
+
+    public ResponseEntity<ApiResponse> getAllUsers() {
+        List<UserDto> theUsers = userService.getAllUsers();
+        return ResponseEntity.ok(new ApiResponse(FeedbackMessage.SUCCESS,theUsers));
     }
 
 }
