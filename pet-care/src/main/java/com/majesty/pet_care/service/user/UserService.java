@@ -34,10 +34,18 @@ public class UserService implements IUserService {
         user.setSpecialization(request.getSpecialization());
         return userRepository.save(user);
     }
-        
+    
+    @Override
     public User findById(Long userId) {
         return userRepository.findById(userId)
                 .orElseThrow(() -> new RessourceNotFoundException("User not found"));
     }
 
+    @Override
+    public void delete(Long userId) {
+        userRepository.findById(userId)
+            .ifPresentOrElse(userRepository::delete, () ->{ 
+                throw new RessourceNotFoundException("User not found");});
+
+    }
 }

@@ -1,6 +1,8 @@
 package com.majesty.pet_care.controller;
 import org.apache.catalina.connector.Response;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
@@ -65,5 +67,35 @@ public class UserController {
                
     }
 
+    @GetMapping(UrlMapping.GET_USER_BY_ID)
+    public ResponseEntity<ApiResponse> findById(@PathVariable Long userId) {
+        try {
+            User user = userService.findById(userId);
+            UserDto theUser = entityConverter.mapEntityToDtoD(user, UserDto.class);
+            return ResponseEntity.ok(new ApiResponse(FeedbackMessage.FOUND,theUser));
+
+        } catch (RessourceNotFoundException e) {
+            return ResponseEntity.status(Response.SC_NOT_FOUND).body(new ApiResponse(e.getMessage(), null));
+
+        } catch (Exception e) {
+            return ResponseEntity.status(Response.SC_INTERNAL_SERVER_ERROR).body(new ApiResponse(e.getMessage(), null));
+
+        }
+   }
+
+   @DeleteMapping(UrlMapping.DELETE_USER_BY_ID)
+   public ResponseEntity<ApiResponse> delete(@PathVariable Long userId) {
+        try {
+            userService.delete(userId);
+            return ResponseEntity.ok(new ApiResponse(FeedbackMessage.DELETE_SUCCESS,null));
+
+        } catch (RessourceNotFoundException e) {
+            return ResponseEntity.status(Response.SC_NOT_FOUND).body(new ApiResponse(e.getMessage(), null));
+
+        } catch (Exception e) {
+            return ResponseEntity.status(Response.SC_INTERNAL_SERVER_ERROR).body(new ApiResponse(e.getMessage(), null));
+            
+        }
+    }
 
 }

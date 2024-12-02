@@ -8,5 +8,6 @@ public class UrlMapping {
     public static final String UPDATE_USER = "/update/{userId}";
     public static final String FOUND = "Found";
     public static final String GET_USER_BY_ID = "user/{userId}";
+    public static final String DELETE_USER_BY_ID = "/delete/{userId}";
 
 }
