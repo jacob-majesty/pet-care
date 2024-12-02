@@ -89,7 +89,7 @@ public class UserController {
    public ResponseEntity<ApiResponse> delete(@PathVariable Long userId) {
         try {
             userService.delete(userId);
-            return ResponseEntity.ok(new ApiResponse(FeedbackMessage.DELETE_SUCCESS,null));
+            return ResponseEntity.status(Response.SC_FOUND).body(new ApiResponse(FeedbackMessage.DELETE_SUCCESS,null));
 
         } catch (RessourceNotFoundException e) {
             return ResponseEntity.status(Response.SC_NOT_FOUND).body(new ApiResponse(e.getMessage(), null));
@@ -100,9 +100,10 @@ public class UserController {
         }
     }
 
+    @GetMapping(UrlMapping.GET_ALL_USERS)
     public ResponseEntity<ApiResponse> getAllUsers() {
         List<UserDto> theUsers = userService.getAllUsers();
-        return ResponseEntity.ok(new ApiResponse(FeedbackMessage.SUCCESS,theUsers));
+        return ResponseEntity.status(Response.SC_FOUND).body(new ApiResponse(FeedbackMessage.FOUND,theUsers));
     }
 
 }
