@@ -1,9 +1,10 @@
 package com.majesty.pet_care.service.appointment;
 
-import java.lang.foreign.Linker.Option;
+import java.time.LocalDate;
+import java.time.LocalTime;
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
-
 import org.springframework.stereotype.Service;
 
 import com.majesty.pet_care.enums.AppointmentStatus;
@@ -12,7 +13,7 @@ import com.majesty.pet_care.model.Appointment;
 import com.majesty.pet_care.model.User;
 import com.majesty.pet_care.repository.AppointmentRepository;
 import com.majesty.pet_care.repository.UserRepository;
-import com.majesty.pet_care.request.AppointmentRequest;
+import com.majesty.pet_care.request.AppointmentUpdateRequest;
 import lombok.RequiredArgsConstructor;
 
 @Service
@@ -29,8 +30,8 @@ public class AppointmentService implements IAppointmentService {
                 Optional<User> recipient = userRepository.findById(recipientId);
 
                 if (sender.isPresent() && recipient.isPresent()) {
-                    appointment.setPatient(sender.get());
-                    appointment.setVeterinarian(recipient.get());
+                    appointment.addPatient(sender.get());
+                    appointment.addVeterinarian(recipient.get());
                     appointment.setAppointmentNo();
                     appointment.setStatus(AppointmentStatus.WAITING_FOR_APPROVAL);
                     return appointmentRepository.save(appointment);
@@ -46,7 +47,8 @@ public class AppointmentService implements IAppointmentService {
 
     @Override
     public void deleteAppointment(Long id) {
-        appointmentRepository.findById(id).ifPresent(appointmentRepository::delete);
+        appointmentRepository.findById(id)
+            .ifPresentOrElse(appointmentRepository::delete, () ->{ throw new RessourceNotFoundException("Appointment not found");});
         
     }
 
@@ -62,9 +64,17 @@ public class AppointmentService implements IAppointmentService {
     }
 
     @Override
-    public Appointment updateAppointment(Long id, AppointmentRequest request) {
-        // TODO Auto-generated method stub
-        return null;
+    public Appointment updateAppointment(Long id, AppointmentUpdateRequest request) {
+
+        Appointment existingAppointment = getAppointmentById(id);
+        if(!Objects.equals(existingAppointment.getStatus(), AppointmentStatus.WAITING_FOR_APPROVAL)) {
+            throw new IllegalStateException("Sorry, this appointment can no longer be updated.");
+        }
+        existingAppointment.setAppointmentDate(LocalDate.parse(request.getAppointmentDate()));
+        existingAppointment.setAppointmentTime(LocalTime.parse(request.getAppointmentTime()));
+        existingAppointment.setReason(request.getReason());
+        
+        return appointmentRepository.save(existingAppointment);
     }
 
 }

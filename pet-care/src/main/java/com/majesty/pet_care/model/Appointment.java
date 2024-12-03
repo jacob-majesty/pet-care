@@ -5,6 +5,7 @@ import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.Random;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.majesty.pet_care.enums.AppointmentStatus;
 
 import jakarta.persistence.Entity;
@@ -35,6 +36,13 @@ public class Appointment {
     private LocalTime time;
     private String appointmentNo;
     private LocalDate createdAt;
+
+    @JsonFormat(pattern = "yyyy-MM-dd")
+    private LocalDate appointmentDate;
+
+    @JsonFormat(pattern = "HH:mm")
+    private LocalTime appointmentTime;
+
 
     @Enumerated(EnumType.STRING)
     private AppointmentStatus status;
