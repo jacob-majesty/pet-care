@@ -3,11 +3,11 @@ package com.majesty.pet_care.model;
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.ArrayList;
-
-import jakarta.persistence.Column;
+import java.util.Random;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -31,11 +31,11 @@ public class Appointment {
     private String appointmentNo;
     private LocalDate createdAt;
 
-    @Column(name = "sender")
+    @JoinColumn(name = "sender")
     @ManyToOne(fetch = jakarta.persistence.FetchType.LAZY)
     private User patient;
 
-    @Column(name = "recipient")
+    @JoinColumn(name = "recipient")
     @ManyToOne(fetch = jakarta.persistence.FetchType.LAZY)
     private User veterinarian;
 
@@ -46,6 +46,18 @@ public class Appointment {
             sender.setAppointments(new ArrayList<>());
         }
         sender.getAppointments().add(this);
+    }
+
+    public void addVeterinarian(User recipient) {
+        this.setVeterinarian(recipient);
+        if (recipient.getAppointments() == null) {
+            recipient.setAppointments(new ArrayList<>());
+        }
+        recipient.getAppointments().add(this);
+    }
+
+    public void setAppointmentNo() {
+        this.appointmentNo = String.valueOf(new Random().nextLong()).substring(1,11);
     }
     
 
