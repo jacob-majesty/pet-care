@@ -6,4 +6,6 @@ import com.majesty.pet_care.model.Appointment;
 
 public interface AppointmentRepository extends JpaRepository<Appointment, Long> {
 
+    Appointment findByAppointmentNo(String appointmentNo);
+
 }
