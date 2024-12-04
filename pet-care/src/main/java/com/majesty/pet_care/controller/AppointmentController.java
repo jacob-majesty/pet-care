@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.majesty.pet_care.exception.RessourceNotFoundException;
 import com.majesty.pet_care.model.Appointment;
+import com.majesty.pet_care.request.AppointmentUpdateRequest;
 import com.majesty.pet_care.response.ApiResponse;
 import com.majesty.pet_care.service.appointment.AppointmentService;
 import com.majesty.pet_care.utils.FeedbackMessage;
@@ -95,7 +96,7 @@ public class AppointmentController {
     }
 
 
-    @DeleteMapping("/appointment/{id}")
+    @DeleteMapping("/appointment/{id}/delete")
     public ResponseEntity<ApiResponse> deleteAppointmentById(@PathVariable Long id) {
         try {
             appointmentService.deleteAppointment(id);
@@ -110,14 +111,17 @@ public class AppointmentController {
         }
     }
 
-    @PutMapping("/appointment/{id}")
-    public ResponseEntity<ApiResponse> updateAppointment(@PathVariable Long id, @RequestBody Appointment appointment) {
+    @PutMapping("/appointment/{id}/update")
+    public ResponseEntity<ApiResponse> updateAppointment(
+            @PathVariable Long id, 
+            @RequestBody AppointmentUpdateRequest request) {
+                
         try {
-            Appointment theAppointment = appointmentService.updateAppointment(id, appointment);
+            Appointment theAppointment = appointmentService.updateAppointment(id, request);
             return ResponseEntity.status(Response.SC_FOUND).body(new ApiResponse(FeedbackMessage.UPDATE_SUCCESS, theAppointment));
             
-        } catch (RessourceNotFoundException e) {
-            return ResponseEntity.status(Response.SC_NOT_FOUND).body(new ApiResponse(e.getMessage(), null));
+        } catch (IllegalStateException e) {
+            return ResponseEntity.status(Response.SC_NOT_ACCEPTABLE).body(new ApiResponse(e.getMessage(), null));
             
         } catch (Exception e) {
             return ResponseEntity.status(Response.SC_INTERNAL_SERVER_ERROR).body(new ApiResponse(e.getMessage(), null));
