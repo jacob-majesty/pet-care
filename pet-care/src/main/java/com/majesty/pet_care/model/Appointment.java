@@ -5,7 +5,10 @@ import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.Random;
 
+import org.hibernate.annotations.CreationTimestamp;
+
 import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.majesty.pet_care.enums.AppointmentStatus;
 
 import jakarta.persistence.Entity;
@@ -26,15 +29,15 @@ import lombok.Setter;
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
+@JsonIgnoreProperties({"patient", "veterinarian"})
 public class Appointment {
 
     @Id
     @GeneratedValue(strategy = jakarta.persistence.GenerationType.IDENTITY)
     private long id;
     private String reason;
-    private LocalDate date;
-    private LocalTime time;
-    private String appointmentNo;
+
+    @CreationTimestamp
     private LocalDate createdAt;
 
     @JsonFormat(pattern = "yyyy-MM-dd")
@@ -42,7 +45,7 @@ public class Appointment {
 
     @JsonFormat(pattern = "HH:mm")
     private LocalTime appointmentTime;
-
+    private String appointmentNo;
 
     @Enumerated(EnumType.STRING)
     private AppointmentStatus status;

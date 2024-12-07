@@ -37,7 +37,7 @@ public class AppointmentController {
     public ResponseEntity<ApiResponse> getAllAppointments() {
         try {
             List<Appointment> appointments = appointmentService.getAllAppointments();
-            return ResponseEntity.status(Response.SC_FOUND).body(new ApiResponse(FeedbackMessage.FOUND, appointments));
+            return ResponseEntity.status(Response.SC_OK).body(new ApiResponse(FeedbackMessage.FOUND, appointments));
 
         } catch (Exception e) {
             return ResponseEntity.status(Response.SC_INTERNAL_SERVER_ERROR).body(new ApiResponse(e.getMessage(), null));
@@ -65,11 +65,11 @@ public class AppointmentController {
     }
 
 
-    @GetMapping("/appointment/{id}")
+    @GetMapping("/appointment/{id}/appointment")
     public ResponseEntity<ApiResponse> getAppointmentById(@PathVariable Long id) {
         try {
             Appointment appointment = appointmentService.getAppointmentById(id);
-            return ResponseEntity.status(Response.SC_FOUND).body(new ApiResponse(FeedbackMessage.FOUND, appointment));
+            return ResponseEntity.status(Response.SC_OK).body(new ApiResponse(FeedbackMessage.FOUND, appointment));
             
         } catch (RessourceNotFoundException e) {
             return ResponseEntity.status(Response.SC_NOT_FOUND).body(new ApiResponse(e.getMessage(), null));
@@ -84,7 +84,7 @@ public class AppointmentController {
     public ResponseEntity<ApiResponse> getAppointmentByNo(@PathVariable String appointmentNo) {
         try {
             Appointment appointment = appointmentService.getAppointmentByNo(appointmentNo);
-            return ResponseEntity.status(Response.SC_FOUND).body(new ApiResponse(FeedbackMessage.FOUND, appointment));
+            return ResponseEntity.status(Response.SC_OK).body(new ApiResponse(FeedbackMessage.FOUND, appointment));
             
         } catch (RessourceNotFoundException e) {
             return ResponseEntity.status(Response.SC_NOT_FOUND).body(new ApiResponse(e.getMessage(), null));
@@ -100,7 +100,7 @@ public class AppointmentController {
     public ResponseEntity<ApiResponse> deleteAppointmentById(@PathVariable Long id) {
         try {
             appointmentService.deleteAppointment(id);
-            return ResponseEntity.status(Response.SC_FOUND).body(new ApiResponse(FeedbackMessage.DELETE_SUCCESS, null));
+            return ResponseEntity.status(Response.SC_OK).body(new ApiResponse(FeedbackMessage.DELETE_SUCCESS, null));
             
         } catch (RessourceNotFoundException e) {
             return ResponseEntity.status(Response.SC_NOT_FOUND).body(new ApiResponse(e.getMessage(), null));
@@ -118,7 +118,7 @@ public class AppointmentController {
                 
         try {
             Appointment theAppointment = appointmentService.updateAppointment(id, request);
-            return ResponseEntity.status(Response.SC_FOUND).body(new ApiResponse(FeedbackMessage.UPDATE_SUCCESS, theAppointment));
+            return ResponseEntity.status(Response.SC_OK).body(new ApiResponse(FeedbackMessage.UPDATE_SUCCESS, theAppointment));
             
         } catch (IllegalStateException e) {
             return ResponseEntity.status(Response.SC_NOT_ACCEPTABLE).body(new ApiResponse(e.getMessage(), null));
