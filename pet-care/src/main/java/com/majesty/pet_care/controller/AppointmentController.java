@@ -28,12 +28,12 @@ import org.springframework.web.bind.annotation.PutMapping;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/appointments")
+@RequestMapping("UrlMapping.APPOINTMENTS")
 public class AppointmentController {
 
     private final AppointmentService appointmentService;
 
-    @GetMapping("/all") 
+    @GetMapping("UrlMapping.ALL_APPOINTMENTS") 
     public ResponseEntity<ApiResponse> getAllAppointments() {
         try {
             List<Appointment> appointments = appointmentService.getAllAppointments();
@@ -44,7 +44,7 @@ public class AppointmentController {
         }            
     }
 
-    @PostMapping("/book-appointment")
+    @PostMapping("UrlMapping.BOOK_APPOINTMENT")
     public ResponseEntity<ApiResponse> bookAppointment(
             @RequestBody Appointment appointment,
             @RequestParam Long senderId,
@@ -65,7 +65,7 @@ public class AppointmentController {
     }
 
 
-    @GetMapping("/appointment/{id}/appointment")
+    @GetMapping("UrlMapping.GET_APPOINTMENT_BY_ID")
     public ResponseEntity<ApiResponse> getAppointmentById(@PathVariable Long id) {
         try {
             Appointment appointment = appointmentService.getAppointmentById(id);
@@ -80,7 +80,7 @@ public class AppointmentController {
         }    
     }
 
-    @GetMapping("/appointment/{appointmentNo}")
+    @GetMapping("UrlMapping.GET_APPOINTMENT_BY_NO")
     public ResponseEntity<ApiResponse> getAppointmentByNo(@PathVariable String appointmentNo) {
         try {
             Appointment appointment = appointmentService.getAppointmentByNo(appointmentNo);
@@ -96,7 +96,7 @@ public class AppointmentController {
     }
 
 
-    @DeleteMapping("/appointment/{id}/delete")
+    @DeleteMapping("UrlMapping.DELETE_APPOINTMENT_BY_ID")
     public ResponseEntity<ApiResponse> deleteAppointmentById(@PathVariable Long id) {
         try {
             appointmentService.deleteAppointment(id);
@@ -111,7 +111,7 @@ public class AppointmentController {
         }
     }
 
-    @PutMapping("/appointment/{id}/update")
+    @PutMapping("UrlMapping.UPDATE_APPOINTMENT")
     public ResponseEntity<ApiResponse> updateAppointment(
             @PathVariable Long id, 
             @RequestBody AppointmentUpdateRequest request) {

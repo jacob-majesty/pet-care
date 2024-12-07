@@ -1,6 +1,9 @@
 package com.majesty.pet_care.model;
 
+import java.time.LocalDate;
 import java.util.List;
+
+import org.hibernate.annotations.CreationTimestamp;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -34,6 +37,9 @@ public class User {
     private String password;
     private String UserType;
     private boolean isEnabled;
+
+    @CreationTimestamp
+    private LocalDate createdAt;
 
     @Transient
     private String specialization;

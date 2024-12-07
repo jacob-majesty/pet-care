@@ -2,7 +2,6 @@ package com.majesty.pet_care.service.user;
 
 import java.util.List;
 import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -13,7 +12,6 @@ import com.majesty.pet_care.exception.RessourceNotFoundException;
 import com.majesty.pet_care.factory.UserFactory;
 import com.majesty.pet_care.model.User;
 import com.majesty.pet_care.repository.UserRepository;
-import com.majesty.pet_care.repository.VeterinarianRepository;
 import com.majesty.pet_care.request.RegistrationRequest;
 import com.majesty.pet_care.request.UserUpdateRequest;
 
@@ -25,7 +23,6 @@ public class UserService implements IUserService {
 
     private final UserFactory userFactory;
     private final UserRepository userRepository;
-    private final VeterinarianRepository veterinarianRepository;
     private final EntityConverter<User, UserDto> entityConverter;
 
     @Override
