@@ -74,7 +74,7 @@ public class UserController {
         try {
             User user = userService.findById(userId);
             UserDto theUser = entityConverter.mapEntityToDtoD(user, UserDto.class);
-            return ResponseEntity.ok(new ApiResponse(FeedbackMessage.RESOURCE_FOUND,theUser));
+            return ResponseEntity.ok(new ApiResponse(FeedbackMessage.FOUND,theUser));
 
         } catch (RessourceNotFoundException e) {
             return ResponseEntity.status(Response.SC_NOT_FOUND).body(new ApiResponse(e.getMessage(), null));
@@ -103,7 +103,7 @@ public class UserController {
     @GetMapping(UrlMapping.GET_ALL_USERS)
     public ResponseEntity<ApiResponse> getAllUsers() {
         List<UserDto> theUsers = userService.getAllUsers();
-        return ResponseEntity.status(Response.SC_FOUND).body(new ApiResponse(FeedbackMessage.RESOURCE_FOUND,theUsers));
+        return ResponseEntity.status(Response.SC_FOUND).body(new ApiResponse(FeedbackMessage.FOUND,theUsers));
     }
 
 }

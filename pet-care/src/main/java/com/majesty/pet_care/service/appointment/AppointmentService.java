@@ -10,10 +10,16 @@ import org.springframework.stereotype.Service;
 import com.majesty.pet_care.enums.AppointmentStatus;
 import com.majesty.pet_care.exception.RessourceNotFoundException;
 import com.majesty.pet_care.model.Appointment;
+import com.majesty.pet_care.model.Pet;
 import com.majesty.pet_care.model.User;
 import com.majesty.pet_care.repository.AppointmentRepository;
+import com.majesty.pet_care.repository.PetRepository;
 import com.majesty.pet_care.repository.UserRepository;
 import com.majesty.pet_care.request.AppointmentUpdateRequest;
+import com.majesty.pet_care.request.BookAppointmentRequest;
+import com.majesty.pet_care.service.pet.IPetService;
+
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 
 @Service
@@ -22,14 +28,22 @@ public class AppointmentService implements IAppointmentService {
 
     private final UserRepository userRepository;
     private final AppointmentRepository appointmentRepository;
+    private final IPetService petService;
 
+    @Transactional
     @Override
-    public Appointment createAppointment(Appointment appointment, Long senderId, Long recipientId) {
+    public Appointment createAppointment(BookAppointmentRequest request, Long senderId, Long recipientId) {
     
                 Optional<User> sender = userRepository.findById(senderId);
                 Optional<User> recipient = userRepository.findById(recipientId);
 
                 if (sender.isPresent() && recipient.isPresent()) {
+                    Appointment appointment = request.getAppointment();
+                    List<Pet> pets = request.getPets();
+                    pets.forEach(pet -> pet.setAppointment(appointment));
+                    List<Pet> savedPets = petService.savePetsForAppointment(pets);
+                    appointment.setPets(savedPets);
+
                     appointment.addPatient(sender.get());
                     appointment.addVeterinarian(recipient.get());
                     appointment.setAppointmentNo();

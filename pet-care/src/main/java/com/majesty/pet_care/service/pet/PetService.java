@@ -19,7 +19,7 @@ public class PetService implements IPetService {
     private final PetRepository petRepository;
 
     @Override
-    public List<Pet> savePetsForAppointments(List<Pet> pets) {
+    public List<Pet> savePetsForAppointment(List<Pet> pets) {
         return petRepository.saveAll(pets);
     }
 

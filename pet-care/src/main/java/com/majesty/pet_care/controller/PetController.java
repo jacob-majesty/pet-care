@@ -46,7 +46,7 @@ public class PetController {
     public ResponseEntity<ApiResponse> getPetById(@PathVariable Long petId){
         try {
             Pet pet = petService.getPetById(petId);
-            return ResponseEntity.status(Response.SC_OK).body(new ApiResponse(FeedbackMessage.RESOURCE_FOUND, pet));
+            return ResponseEntity.status(Response.SC_OK).body(new ApiResponse(FeedbackMessage.FOUND, pet));
             
         } catch (RessourceNotFoundException e) {
             return ResponseEntity.status(Response.SC_NOT_FOUND).body(new ApiResponse(e.getMessage(), null));
