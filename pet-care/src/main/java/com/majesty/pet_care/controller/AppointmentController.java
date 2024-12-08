@@ -14,6 +14,7 @@ import com.majesty.pet_care.request.BookAppointmentRequest;
 import com.majesty.pet_care.response.ApiResponse;
 import com.majesty.pet_care.service.appointment.AppointmentService;
 import com.majesty.pet_care.utils.FeedbackMessage;
+import com.majesty.pet_care.utils.UrlMapping;
 
 import lombok.RequiredArgsConstructor;
 
@@ -29,12 +30,12 @@ import org.springframework.web.bind.annotation.PutMapping;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("UrlMapping.APPOINTMENTS")
+@RequestMapping(UrlMapping.APPOINTMENTS)
 public class AppointmentController {
 
     private final AppointmentService appointmentService;
 
-    @GetMapping("UrlMapping.ALL_APPOINTMENTS") 
+    @GetMapping(UrlMapping.ALL_APPOINTMENTS) 
     public ResponseEntity<ApiResponse> getAllAppointments() {
         try {
             List<Appointment> appointments = appointmentService.getAllAppointments();
@@ -45,7 +46,7 @@ public class AppointmentController {
         }            
     }
 
-    @PostMapping("UrlMapping.BOOK_APPOINTMENT")
+    @PostMapping(UrlMapping.BOOK_APPOINTMENT)
     public ResponseEntity<ApiResponse> bookAppointment(
             @RequestBody BookAppointmentRequest request,
             @RequestParam Long senderId,
@@ -66,7 +67,7 @@ public class AppointmentController {
     }
 
 
-    @GetMapping("UrlMapping.GET_APPOINTMENT_BY_ID")
+    @GetMapping(UrlMapping.GET_APPOINTMENT_BY_ID)
     public ResponseEntity<ApiResponse> getAppointmentById(@PathVariable Long id) {
         try {
             Appointment appointment = appointmentService.getAppointmentById(id);
@@ -81,7 +82,7 @@ public class AppointmentController {
         }    
     }
 
-    @GetMapping("UrlMapping.GET_APPOINTMENT_BY_NO")
+    @GetMapping(UrlMapping.GET_APPOINTMENT_BY_NO)
     public ResponseEntity<ApiResponse> getAppointmentByNo(@PathVariable String appointmentNo) {
         try {
             Appointment appointment = appointmentService.getAppointmentByNo(appointmentNo);
@@ -97,7 +98,7 @@ public class AppointmentController {
     }
 
 
-    @DeleteMapping("UrlMapping.DELETE_APPOINTMENT_BY_ID")
+    @DeleteMapping(UrlMapping.DELETE_APPOINTMENT_BY_ID)
     public ResponseEntity<ApiResponse> deleteAppointmentById(@PathVariable Long id) {
         try {
             appointmentService.deleteAppointment(id);
@@ -112,7 +113,7 @@ public class AppointmentController {
         }
     }
 
-    @PutMapping("UrlMapping.UPDATE_APPOINTMENT")
+    @PutMapping(UrlMapping.UPDATE_APPOINTMENT)
     public ResponseEntity<ApiResponse> updateAppointment(
             @PathVariable Long id, 
             @RequestBody AppointmentUpdateRequest request) {

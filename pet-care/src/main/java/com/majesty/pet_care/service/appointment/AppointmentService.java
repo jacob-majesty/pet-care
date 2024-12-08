@@ -13,7 +13,6 @@ import com.majesty.pet_care.model.Appointment;
 import com.majesty.pet_care.model.Pet;
 import com.majesty.pet_care.model.User;
 import com.majesty.pet_care.repository.AppointmentRepository;
-import com.majesty.pet_care.repository.PetRepository;
 import com.majesty.pet_care.repository.UserRepository;
 import com.majesty.pet_care.request.AppointmentUpdateRequest;
 import com.majesty.pet_care.request.BookAppointmentRequest;
