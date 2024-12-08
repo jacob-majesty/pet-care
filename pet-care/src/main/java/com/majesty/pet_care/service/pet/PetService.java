@@ -2,14 +2,21 @@ package com.majesty.pet_care.service.pet;
 
 import java.util.List;
 
+import org.springframework.stereotype.Service;
+
 import com.majesty.pet_care.exception.RessourceNotFoundException;
 import com.majesty.pet_care.model.Pet;
-import com.majesty.pet_care.repository.pet.PetRepository;
+import com.majesty.pet_care.repository.PetRepository;
 import com.majesty.pet_care.utils.FeedbackMessage;
+
+import lombok.RequiredArgsConstructor;
+
+@Service
+@RequiredArgsConstructor
 
 public class PetService implements IPetService {
 
-    private PetRepository petRepository;
+    private final PetRepository petRepository;
 
     @Override
     public List<Pet> savePetsForAppointments(List<Pet> pets) {
@@ -17,9 +24,16 @@ public class PetService implements IPetService {
     }
 
     @Override
-    public Pet updatePet(Pet pet, long Id) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'updatePet'");
+    public Pet updatePet(Pet pet, long petId) {
+        Pet existingPet = getPetById(petId);
+        existingPet.setName(pet.getName());
+        existingPet.setAge(pet.getAge());
+        existingPet.setColor(pet.getColor());
+        existingPet.setType(pet.getType());
+        existingPet.setBreed(pet.getBreed());
+
+        return petRepository.save(existingPet);
+
     }
 
     @Override

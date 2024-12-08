@@ -19,4 +19,11 @@ public class UrlMapping {
     public static final String BOOK_APPOINTMENT = "/book-appointment";
     public static final String UPDATE_APPOINTMENT = "/appointment/{id}/update";
     public static final String DELETE_APPOINTMENT = "/appointment/{id}/delete";
+
+    /* Pet API */  
+    public static final String PETS = API+"/pets";
+    public static final String UPDATE_PET = "/pet/{petId}/update";
+    public static final String SAVE_PETS_FOR_APPOINTMENT = "/save-pets/"; 
+    public static final String GET_PET_BY_ID = "/pet/{petId}/pet";
+    public static final String DELETE_PET_BY_ID = "/pet/{petId}/delete";
 }
