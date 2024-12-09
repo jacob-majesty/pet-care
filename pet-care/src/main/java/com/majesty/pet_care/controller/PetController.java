@@ -25,7 +25,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 
 
 @RestController
-@RequestMapping("UrlMapping.PETS")
+@RequestMapping(UrlMapping.PETS)
 @RequiredArgsConstructor
 public class PetController {
 
