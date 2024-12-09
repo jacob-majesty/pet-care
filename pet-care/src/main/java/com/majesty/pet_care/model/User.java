@@ -10,6 +10,7 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.Id;
 import jakarta.persistence.InheritanceType;
+import jakarta.persistence.OneToOne;
 import jakarta.persistence.Transient;
 import jakarta.persistence.Inheritance;
 import lombok.AllArgsConstructor;
@@ -46,5 +47,8 @@ public class User {
 
     @Transient
     List<Appointment> appointments;
+
+    @OneToOne(cascade = jakarta.persistence.CascadeType.ALL, fetch = jakarta.persistence.FetchType.EAGER, orphanRemoval = true)
+    private Photo photo;
 
 }
