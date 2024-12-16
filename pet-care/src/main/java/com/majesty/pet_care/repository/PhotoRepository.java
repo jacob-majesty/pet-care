@@ -1,5 +1,10 @@
-package com.majesty.pet_care.service.photo;
+package com.majesty.pet_care.repository;
 
-public class PhotoRepository {
+import org.springframework.data.jpa.repository.JpaRepository;
+
+import com.majesty.pet_care.model.Photo;
+
+public interface PhotoRepository extends JpaRepository<Photo, Long> {
+
 
 }

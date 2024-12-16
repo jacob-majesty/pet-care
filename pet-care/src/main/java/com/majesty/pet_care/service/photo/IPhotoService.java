@@ -11,9 +11,9 @@ import com.majesty.pet_care.model.Photo;
 public interface IPhotoService {
 
     Photo savePhoto(MultipartFile photo, Long userId) throws IOException, SQLException;
-    Optional<Photo> getPhotoById(Long id);
-    void deletePhoto(Long id);
-    Photo updatePhoto(Long id, byte[] imageData);
-    byte[] getImageData(Long id);
+    Photo getPhotoById(Long id);
+    void deletePhoto(Long id, Long userId) throws SQLException;
+    Photo updatePhoto(Long id, MultipartFile file) throws SQLException, IOException;
+    byte[] getImageData(Long id) throws SQLException;
 
 }

@@ -51,4 +51,10 @@ public class User {
     @OneToOne(cascade = jakarta.persistence.CascadeType.ALL, fetch = jakarta.persistence.FetchType.EAGER, orphanRemoval = true)
     private Photo photo;
 
+    public void removeUserPhoto(){
+        if(this.getPhoto() != null){
+            this.setPhoto(null);
+        }
+    }
+
 }

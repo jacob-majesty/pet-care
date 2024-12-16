@@ -19,6 +19,7 @@ public class Photo {
     @GeneratedValue(strategy = jakarta.persistence.GenerationType.IDENTITY)
     private Long id;
     private String fileType;
+    private String fileName;
 
     @Lob
     private Blob image;
