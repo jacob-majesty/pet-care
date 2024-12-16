@@ -25,7 +25,7 @@ import com.majesty.pet_care.utils.FeedbackMessage;
 import lombok.RequiredArgsConstructor;
 
 @RestController
-@RequestMapping
+@RequestMapping(UrlMapping.PHOTOS)
 @RequiredArgsConstructor
 public class PhotoController {
 
@@ -49,7 +49,7 @@ public class PhotoController {
             Photo photo = photoService.getPhotoById(photoId);
             if (photo != null) {
                 byte[] photoBytes = photoService.getImageData(photo.getId());
-            return ResponseEntity.status(Response.SC_OK).body(new ApiResponse(FeedbackMessage.FOUND, photo));
+            return ResponseEntity.status(Response.SC_OK).body(new ApiResponse(FeedbackMessage.FOUND, photoBytes));
             }
         } catch (RessourceNotFoundException | SQLException e) {
             return ResponseEntity.status(Response.SC_NOT_FOUND).body(new ApiResponse(FeedbackMessage.NOT_FOUND, null));
@@ -63,10 +63,10 @@ public class PhotoController {
             Photo photo = photoService.getPhotoById(photoId);
             if (photo != null) {
                 photoService.deletePhoto(photo.getId(), userId);
-            return ResponseEntity.status(Response.SC_OK).body(new ApiResponse(FeedbackMessage.DELETE_SUCCESS, null));
+            return ResponseEntity.status(Response.SC_OK).body(new ApiResponse(FeedbackMessage.DELETE_SUCCESS, photo.getId()));
             }
         } catch (RessourceNotFoundException | SQLException e) {
-        return ResponseEntity.status(Response.SC_INTERNAL_SERVER_ERROR).body(new ApiResponse(FeedbackMessage.DELETE_SUCCESS, null));
+        return ResponseEntity.status(Response.SC_NOT_FOUND).body(new ApiResponse(FeedbackMessage.NOT_FOUND, null));
         }
         return ResponseEntity.status(Response.SC_INTERNAL_SERVER_ERROR).body(new ApiResponse(FeedbackMessage.NOT_FOUND, null));
     }
@@ -78,7 +78,7 @@ public class PhotoController {
             Photo photo = photoService.getPhotoById(photoId);
             if (photo != null) {
                 Photo updatedPhoto = photoService.updatePhoto(photo.getId(), file);
-                return ResponseEntity.status(Response.SC_OK).body(new ApiResponse(FeedbackMessage.CREATE_SUCCESS, null));
+                return ResponseEntity.status(Response.SC_OK).body(new ApiResponse(FeedbackMessage.UPDATE_SUCCESS, updatedPhoto.getId()));
             }
         } catch (RessourceNotFoundException | SQLException e) {
             return ResponseEntity.status(Response.SC_NOT_FOUND).body(new ApiResponse(FeedbackMessage.NOT_FOUND, null));
