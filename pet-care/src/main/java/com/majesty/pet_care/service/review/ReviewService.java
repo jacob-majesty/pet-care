@@ -12,6 +12,7 @@ import com.majesty.pet_care.repository.AppointmentRepository;
 import com.majesty.pet_care.repository.ReviewRepository;
 import com.majesty.pet_care.utils.FeedbackMessage;
 import com.majesty.pet_care.repository.UserRepository;
+import com.majesty.pet_care.request.ReviewUpdateRequest;
 
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
@@ -49,11 +50,11 @@ public class ReviewService implements IReviewService {
 
         //4 Get the veterinarian  from the database
         User veterinarian = userRepository.findById(veterinarianId)
-            .orElseThrow(() -> new ResourceNotFoundException(FeedbackMessage.NOT_FOUND));
+            .orElseThrow(() -> new ResourceNotFoundException(FeedbackMessage.VET_OR_PATIENT_NOT_FOUND));
 
         //4 Get the patient from the database
         User patient = userRepository.findById(reviewerId)
-            .orElseThrow(()->new ResourceNotFoundException(FeedbackMessage.NOT_FOUND));
+            .orElseThrow(()->new ResourceNotFoundException(FeedbackMessage.VET_OR_PATIENT_NOT_FOUND));
 
         //5. Set both to the review
         review.setVeterinarian(veterinarian);
@@ -75,13 +76,13 @@ public class ReviewService implements IReviewService {
     }
 
     @Override
-    public void updateReview(Review review, Long reviewId) {
-        reviewRepository.findById(reviewId)
-            .ifPresentOrElse(existingReview -> {
+    public Review updateReview(Long reviewerId, ReviewUpdateRequest review) {
+        return reviewRepository.findById(reviewerId)
+            .map(existingReview -> {
                 existingReview.setStars(review.getStars());
                 existingReview.setFeedback(review.getFeedback());
-                reviewRepository.save(existingReview);
-            }, () -> {
+                return reviewRepository.save(existingReview);
+            }).orElseThrow( () -> {
                 throw new ResourceNotFoundException(FeedbackMessage.NOT_FOUND);
             });    
         
@@ -94,4 +95,17 @@ public class ReviewService implements IReviewService {
         return reviewRepository.findAllByUserId(userId, pageRequest);
     }
 
+    @Override
+    public void deleteReview(Long reviewerId) {
+        reviewRepository.findById(reviewerId)
+                .ifPresentOrElse(Review::removeRelationShip, ()->{
+                   throw new ResourceNotFoundException(FeedbackMessage.RESOURCE_NOT_FOUND);
+                });
+        reviewRepository.deleteById(reviewerId);
+    }
+
 }
+
+    
+
+

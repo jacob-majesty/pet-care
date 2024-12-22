@@ -23,4 +23,6 @@ public interface ReviewRepository extends JpaRepository<Review, Long> {
 
     boolean existsByReviewerIdAndVeterinarianId(Long reviewerId, Long veterinarianId, AppointmentStatus appointmentStatus);
 
+    Optional<Review> findByVeterinarianIdAndPatientId(Long veterinarianId, Long reviewerId);
+
 }
