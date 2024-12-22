@@ -1,6 +1,7 @@
 package com.majesty.pet_care.model;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
 
 import org.hibernate.annotations.CreationTimestamp;
@@ -46,7 +47,10 @@ public class User {
     private String specialization;
 
     @Transient
-    List<Appointment> appointments;
+    private List<Appointment> appointments = new ArrayList<>();
+
+    @Transient
+    List<Review> reviews = new ArrayList<>();
 
     @OneToOne(cascade = jakarta.persistence.CascadeType.ALL, fetch = jakarta.persistence.FetchType.EAGER, orphanRemoval = true)
     private Photo photo;
