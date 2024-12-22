@@ -4,7 +4,7 @@ import java.util.List;
 
 import org.springframework.stereotype.Service;
 
-import com.majesty.pet_care.exception.RessourceNotFoundException;
+import com.majesty.pet_care.exception.ResourceNotFoundException;
 import com.majesty.pet_care.model.Pet;
 import com.majesty.pet_care.repository.PetRepository;
 import com.majesty.pet_care.utils.FeedbackMessage;
@@ -39,13 +39,13 @@ public class PetService implements IPetService {
     public void deletePet(long petId) {
        petRepository.findById(petId)
                 .ifPresentOrElse(petRepository::delete, 
-                () ->{ throw new RessourceNotFoundException(FeedbackMessage.NOT_FOUND);});
+                () ->{ throw new ResourceNotFoundException(FeedbackMessage.NOT_FOUND);});
     }
 
     @Override
     public Pet getPetById(long petId) {
         return petRepository.findById(petId)
-                .orElseThrow(() -> new RessourceNotFoundException(FeedbackMessage.NOT_FOUND));
+                .orElseThrow(() -> new ResourceNotFoundException(FeedbackMessage.NOT_FOUND));
     }
 
 

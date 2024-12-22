@@ -13,7 +13,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import com.majesty.pet_care.dto.EntityConverter;
 import com.majesty.pet_care.dto.UserDto;
-import com.majesty.pet_care.exception.RessourceNotFoundException;
+import com.majesty.pet_care.exception.ResourceNotFoundException;
 import com.majesty.pet_care.exception.UserAlreadyExistsException;
 import com.majesty.pet_care.model.User;
 import com.majesty.pet_care.request.RegistrationRequest;
@@ -59,7 +59,7 @@ public class UserController {
             UserDto userDto = entityConverter.mapEntityToDtoD(user, UserDto.class);
             return ResponseEntity.ok(new ApiResponse(FeedbackMessage.UPDATE_SUCCESS,userDto));
 
-        } catch (RessourceNotFoundException e) {
+        } catch (ResourceNotFoundException e) {
             return ResponseEntity.status(Response.SC_NOT_FOUND).body(new ApiResponse(e.getMessage(), null));
 
         } catch (Exception e) {
@@ -76,7 +76,7 @@ public class UserController {
             UserDto theUser = entityConverter.mapEntityToDtoD(user, UserDto.class);
             return ResponseEntity.ok(new ApiResponse(FeedbackMessage.FOUND,theUser));
 
-        } catch (RessourceNotFoundException e) {
+        } catch (ResourceNotFoundException e) {
             return ResponseEntity.status(Response.SC_NOT_FOUND).body(new ApiResponse(e.getMessage(), null));
 
         } catch (Exception e) {
@@ -91,7 +91,7 @@ public class UserController {
             userService.delete(userId);
             return ResponseEntity.status(Response.SC_FOUND).body(new ApiResponse(FeedbackMessage.DELETE_SUCCESS,null));
 
-        } catch (RessourceNotFoundException e) {
+        } catch (ResourceNotFoundException e) {
             return ResponseEntity.status(Response.SC_NOT_FOUND).body(new ApiResponse(e.getMessage(), null));
 
         } catch (Exception e) {

@@ -10,7 +10,7 @@ import javax.sql.rowset.serial.SerialBlob;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
-import com.majesty.pet_care.exception.RessourceNotFoundException;
+import com.majesty.pet_care.exception.ResourceNotFoundException;
 import com.majesty.pet_care.model.Photo;
 import com.majesty.pet_care.model.User;
 import com.majesty.pet_care.repository.PhotoRepository;
@@ -50,17 +50,17 @@ public class PhotoService implements IPhotoService {
     @Override
     public Photo getPhotoById(Long id) {
             return photoRepository.findById(id)
-                .orElseThrow(() -> new RessourceNotFoundException(FeedbackMessage.NOT_FOUND));
+                .orElseThrow(() -> new ResourceNotFoundException(FeedbackMessage.NOT_FOUND));
     }
 
     @Transactional
     @Override
     public void deletePhoto(Long id, Long userId) {
         userRepository.findById(userId)
-                    .ifPresentOrElse(User ::removeUserPhoto, () -> { throw new RessourceNotFoundException(FeedbackMessage.NOT_FOUND);});
+                    .ifPresentOrElse(User ::removeUserPhoto, () -> { throw new ResourceNotFoundException(FeedbackMessage.NOT_FOUND);});
         photoRepository.findById(id)
             .ifPresentOrElse(photoRepository::delete, () -> {
-                throw new RessourceNotFoundException(FeedbackMessage.NOT_FOUND);});
+                throw new ResourceNotFoundException(FeedbackMessage.NOT_FOUND);});
     }
 
     @Override
@@ -74,7 +74,7 @@ public class PhotoService implements IPhotoService {
             photo.setFileName(file.getOriginalFilename());
            return photoRepository.save(photo);
         }
-        throw new RessourceNotFoundException(FeedbackMessage.NOT_FOUND);
+        throw new ResourceNotFoundException(FeedbackMessage.NOT_FOUND);
     }
 
     @Override

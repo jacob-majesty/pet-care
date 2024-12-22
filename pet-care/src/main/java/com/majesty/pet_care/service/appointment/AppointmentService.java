@@ -8,7 +8,7 @@ import java.util.Optional;
 import org.springframework.stereotype.Service;
 
 import com.majesty.pet_care.enums.AppointmentStatus;
-import com.majesty.pet_care.exception.RessourceNotFoundException;
+import com.majesty.pet_care.exception.ResourceNotFoundException;
 import com.majesty.pet_care.model.Appointment;
 import com.majesty.pet_care.model.Pet;
 import com.majesty.pet_care.model.User;
@@ -49,7 +49,7 @@ public class AppointmentService implements IAppointmentService {
                     appointment.setStatus(AppointmentStatus.WAITING_FOR_APPROVAL);
                     return appointmentRepository.save(appointment);
                 }
-        throw new RessourceNotFoundException("Sender or recipient not found");
+        throw new ResourceNotFoundException("Sender or recipient not found");
     }
 
     @Override
@@ -61,14 +61,14 @@ public class AppointmentService implements IAppointmentService {
     @Override
     public void deleteAppointment(Long id) {
         appointmentRepository.findById(id)
-            .ifPresentOrElse(appointmentRepository::delete, () ->{ throw new RessourceNotFoundException("Appointment not found");});
+            .ifPresentOrElse(appointmentRepository::delete, () ->{ throw new ResourceNotFoundException("Appointment not found");});
         
     }
 
     @Override
     public Appointment getAppointmentById(Long id) {
         return appointmentRepository.findById(id)
-            .orElseThrow(() -> new RessourceNotFoundException("Appointment not found"));
+            .orElseThrow(() -> new ResourceNotFoundException("Appointment not found"));
     }
 
     @Override

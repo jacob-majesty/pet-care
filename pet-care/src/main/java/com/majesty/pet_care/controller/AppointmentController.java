@@ -7,7 +7,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.majesty.pet_care.exception.RessourceNotFoundException;
+import com.majesty.pet_care.exception.ResourceNotFoundException;
 import com.majesty.pet_care.model.Appointment;
 import com.majesty.pet_care.request.AppointmentUpdateRequest;
 import com.majesty.pet_care.request.BookAppointmentRequest;
@@ -57,7 +57,7 @@ public class AppointmentController {
                     return ResponseEntity.status(Response.SC_OK).body(new ApiResponse(FeedbackMessage.CREATE_SUCCESS, theAppointment));
 
 
-                } catch (RessourceNotFoundException e) {
+                } catch (ResourceNotFoundException e) {
                     return ResponseEntity.status(Response.SC_NOT_FOUND).body(new ApiResponse(e.getMessage(), null));
                     
                 } catch (Exception e) {
@@ -73,7 +73,7 @@ public class AppointmentController {
             Appointment appointment = appointmentService.getAppointmentById(id);
             return ResponseEntity.status(Response.SC_OK).body(new ApiResponse(FeedbackMessage.FOUND, appointment));
             
-        } catch (RessourceNotFoundException e) {
+        } catch (ResourceNotFoundException e) {
             return ResponseEntity.status(Response.SC_NOT_FOUND).body(new ApiResponse(e.getMessage(), null));
             
         } catch (Exception e) {
@@ -88,7 +88,7 @@ public class AppointmentController {
             Appointment appointment = appointmentService.getAppointmentByNo(appointmentNo);
             return ResponseEntity.status(Response.SC_OK).body(new ApiResponse(FeedbackMessage.FOUND, appointment));
             
-        } catch (RessourceNotFoundException e) {
+        } catch (ResourceNotFoundException e) {
             return ResponseEntity.status(Response.SC_NOT_FOUND).body(new ApiResponse(e.getMessage(), null));
             
         } catch (Exception e) {
@@ -104,7 +104,7 @@ public class AppointmentController {
             appointmentService.deleteAppointment(id);
             return ResponseEntity.status(Response.SC_OK).body(new ApiResponse(FeedbackMessage.DELETE_SUCCESS, null));
             
-        } catch (RessourceNotFoundException e) {
+        } catch (ResourceNotFoundException e) {
             return ResponseEntity.status(Response.SC_NOT_FOUND).body(new ApiResponse(e.getMessage(), null));
             
         } catch (Exception e) {

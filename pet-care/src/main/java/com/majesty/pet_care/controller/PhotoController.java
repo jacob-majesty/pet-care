@@ -14,7 +14,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
-import com.majesty.pet_care.exception.RessourceNotFoundException;
+import com.majesty.pet_care.exception.ResourceNotFoundException;
 
 import com.majesty.pet_care.model.Photo;
 import com.majesty.pet_care.response.ApiResponse;
@@ -51,7 +51,7 @@ public class PhotoController {
                 byte[] photoBytes = photoService.getImageData(photo.getId());
             return ResponseEntity.status(Response.SC_OK).body(new ApiResponse(FeedbackMessage.FOUND, photoBytes));
             }
-        } catch (RessourceNotFoundException | SQLException e) {
+        } catch (ResourceNotFoundException | SQLException e) {
             return ResponseEntity.status(Response.SC_NOT_FOUND).body(new ApiResponse(FeedbackMessage.NOT_FOUND, null));
         }
         return ResponseEntity.status(Response.SC_INTERNAL_SERVER_ERROR).body(new ApiResponse(FeedbackMessage.NOT_FOUND, null));
@@ -65,7 +65,7 @@ public class PhotoController {
                 photoService.deletePhoto(photo.getId(), userId);
             return ResponseEntity.status(Response.SC_OK).body(new ApiResponse(FeedbackMessage.DELETE_SUCCESS, photo.getId()));
             }
-        } catch (RessourceNotFoundException | SQLException e) {
+        } catch (ResourceNotFoundException | SQLException e) {
         return ResponseEntity.status(Response.SC_NOT_FOUND).body(new ApiResponse(FeedbackMessage.NOT_FOUND, null));
         }
         return ResponseEntity.status(Response.SC_INTERNAL_SERVER_ERROR).body(new ApiResponse(FeedbackMessage.NOT_FOUND, null));
@@ -80,7 +80,7 @@ public class PhotoController {
                 Photo updatedPhoto = photoService.updatePhoto(photo.getId(), file);
                 return ResponseEntity.status(Response.SC_OK).body(new ApiResponse(FeedbackMessage.UPDATE_SUCCESS, updatedPhoto.getId()));
             }
-        } catch (RessourceNotFoundException | SQLException e) {
+        } catch (ResourceNotFoundException | SQLException e) {
             return ResponseEntity.status(Response.SC_NOT_FOUND).body(new ApiResponse(FeedbackMessage.NOT_FOUND, null));
         }
             return ResponseEntity.status(Response.SC_INTERNAL_SERVER_ERROR).body(new ApiResponse(FeedbackMessage.NOT_FOUND, null));

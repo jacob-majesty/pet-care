@@ -8,7 +8,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 
 import com.majesty.pet_care.dto.EntityConverter;
 import com.majesty.pet_care.dto.UserDto;
-import com.majesty.pet_care.exception.RessourceNotFoundException;
+import com.majesty.pet_care.exception.ResourceNotFoundException;
 import com.majesty.pet_care.factory.UserFactory;
 import com.majesty.pet_care.model.User;
 import com.majesty.pet_care.repository.UserRepository;
@@ -44,14 +44,14 @@ public class UserService implements IUserService {
     @Override
     public User findById(Long userId) {
         return userRepository.findById(userId)
-                .orElseThrow(() -> new RessourceNotFoundException("User not found"));
+                .orElseThrow(() -> new ResourceNotFoundException("User not found"));
     }
 
     @Override
     public void delete(Long userId) {
         userRepository.findById(userId)
             .ifPresentOrElse(userRepository::delete, () ->{ 
-                throw new RessourceNotFoundException("User not found");});
+                throw new ResourceNotFoundException("User not found");});
 
     }
 
