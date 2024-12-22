@@ -2,7 +2,7 @@ package com.majesty.pet_care.factory;
 
 import org.springframework.stereotype.Component;
 
-import com.majesty.pet_care.exception.UserAlreadyExistsException;
+import com.majesty.pet_care.exception.AlreadyExistsException;
 import com.majesty.pet_care.model.User;
 import com.majesty.pet_care.repository.UserRepository;
 import com.majesty.pet_care.request.RegistrationRequest;
@@ -21,7 +21,7 @@ public class SimpleUserFactory implements UserFactory {
     @Override
     public User createUser(RegistrationRequest registrationRequest) {
         if(userRepository.existsByEmail(registrationRequest.getEmail())) {
-            throw new UserAlreadyExistsException("Oops! " + registrationRequest.getEmail() + " already exists.");
+            throw new AlreadyExistsException("Oops! " + registrationRequest.getEmail() + " already exists.");
         }
         switch (registrationRequest.getUserType()) {
             case "VET" ->{return veterinarianFactory.createVeterinarian(registrationRequest);}
