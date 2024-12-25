@@ -7,6 +7,9 @@ import java.util.Objects;
 import java.util.Optional;
 import org.springframework.stereotype.Service;
 
+import com.majesty.pet_care.dto.AppointmentDto;
+import com.majesty.pet_care.dto.EntityConverter;
+import com.majesty.pet_care.dto.PetDto;
 import com.majesty.pet_care.enums.AppointmentStatus;
 import com.majesty.pet_care.exception.ResourceNotFoundException;
 import com.majesty.pet_care.model.Appointment;
@@ -18,6 +21,7 @@ import com.majesty.pet_care.request.AppointmentUpdateRequest;
 import com.majesty.pet_care.request.BookAppointmentRequest;
 import com.majesty.pet_care.service.pet.IPetService;
 
+
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 
@@ -28,6 +32,10 @@ public class AppointmentService implements IAppointmentService {
     private final UserRepository userRepository;
     private final AppointmentRepository appointmentRepository;
     private final IPetService petService;
+    private final EntityConverter<Appointment, AppointmentDto> entityConverter;
+    private final EntityConverter<Pet, PetDto> petEntityConverter;
+
+
 
     @Transactional
     @Override
@@ -88,6 +96,21 @@ public class AppointmentService implements IAppointmentService {
         existingAppointment.setReason(request.getReason());
         
         return appointmentRepository.save(existingAppointment);
+    }
+
+    @Override
+    public List<AppointmentDto> getUserAppointments(Long userId) {
+        List<Appointment> appointments = appointmentRepository.findAllByUserId(userId);
+        return appointments.stream()
+                .map(appointment -> {
+                    AppointmentDto appointmentDto = entityConverter.mapEntityToDto(appointment, AppointmentDto.class);
+                    List<PetDto> petDto = appointment.getPets()
+                            .stream()
+                            .map(pet -> petEntityConverter.mapEntityToDto(pet, PetDto.class)).toList();
+                    appointmentDto.setPets(petDto);
+                    return appointmentDto;
+                }).toList();
+
     }
 
 }

@@ -38,7 +38,7 @@ public class UserController {
     public ResponseEntity<ApiResponse> register(@RequestBody RegistrationRequest request) {
         try {
             User theUser = userService.register(request);
-            UserDto registeredUser = entityConverter.mapEntityToDtoD(theUser, UserDto.class);
+            UserDto registeredUser = entityConverter.mapEntityToDto(theUser, UserDto.class);
             return ResponseEntity.ok(new ApiResponse(FeedbackMessage.CREATE_SUCCESS,registeredUser));
 
         } catch (AlreadyExistsException e) {
@@ -56,7 +56,7 @@ public class UserController {
 
         try {
             User user = userService.update(userId, request);
-            UserDto userDto = entityConverter.mapEntityToDtoD(user, UserDto.class);
+            UserDto userDto = entityConverter.mapEntityToDto(user, UserDto.class);
             return ResponseEntity.ok(new ApiResponse(FeedbackMessage.UPDATE_SUCCESS,userDto));
 
         } catch (ResourceNotFoundException e) {
@@ -73,7 +73,7 @@ public class UserController {
     public ResponseEntity<ApiResponse> findById(@PathVariable Long userId) {
         try {
             User user = userService.findById(userId);
-            UserDto theUser = entityConverter.mapEntityToDtoD(user, UserDto.class);
+            UserDto theUser = entityConverter.mapEntityToDto(user, UserDto.class);
             return ResponseEntity.ok(new ApiResponse(FeedbackMessage.FOUND,theUser));
 
         } catch (ResourceNotFoundException e) {

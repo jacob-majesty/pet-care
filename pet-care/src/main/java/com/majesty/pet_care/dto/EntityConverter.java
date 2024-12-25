@@ -1,5 +1,6 @@
 package com.majesty.pet_care.dto;
 
+
 import org.springframework.stereotype.Component;
 import org.modelmapper.ModelMapper;
 import lombok.RequiredArgsConstructor;
@@ -10,7 +11,7 @@ public class EntityConverter<T, D> {
 
     private final ModelMapper modelMapper;
 
-    public D mapEntityToDtoD(T entity, Class<D> dtoClass) {
+    public D mapEntityToDto(T entity, Class<D> dtoClass) {
         return modelMapper.map(entity, dtoClass);
 
     }

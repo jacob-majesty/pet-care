@@ -6,6 +6,9 @@ import java.util.List;
 
 import com.majesty.pet_care.enums.AppointmentStatus;
 
+import lombok.Data;
+
+@Data
 public class AppointmentDto {
 
     private long id;

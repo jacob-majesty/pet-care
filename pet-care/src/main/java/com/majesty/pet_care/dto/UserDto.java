@@ -1,7 +1,8 @@
 package com.majesty.pet_care.dto;
 
+import java.time.LocalDate;
+import java.util.List;
 
-import jakarta.persistence.Transient;
 import lombok.Data;
 
 @Data
@@ -15,8 +16,12 @@ public class UserDto {
     private String email;
     private String UserType;
     private boolean isEnabled;
-
-    @Transient
     private String specialization;
+    private LocalDate createdAt;
+    private List<AppointmentDto> appointments;
+    private List<ReviewDto> reviews;
+    private long imageId;
+    private byte[] image;
+    private double averageRating;
 
 }
