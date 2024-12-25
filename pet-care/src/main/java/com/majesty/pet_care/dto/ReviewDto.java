@@ -4,14 +4,14 @@ import lombok.Data;
 
 @Data
 public class ReviewDto {
-    private long id;    
-    private String feedback;
+    private Long id;
     private int stars;
-    private Long vetId;
-    private String vetName;
-    private Long reviewId;
-    private String reviewName;
-    private byte[] reviewImage;
-    private byte[] vetImage;
+    private String feedback;
+    private Long veterinarianId;
+    private String veterinarianName;
+    private Long patientId;
+    private String patientName;
+    private byte[] patientImage;
+    private byte[] veterinarianImage;
 
 }
