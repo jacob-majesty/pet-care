@@ -56,8 +56,8 @@ public class ReviewController {
                                                         @RequestParam(defaultValue = "0") int page, 
                                                         @RequestParam(defaultValue = "5") int size) {
         Page<Review> reviewPage = reviewService.findAllReviewsByUserId(userId, page, size);
-        reviewPage.map(element -> modelMapper.map(element, ReviewDto.class));
-        return ResponseEntity.status(Response.SC_OK).body(new ApiResponse(FeedbackMessage.FOUND, reviewPage));
+        Page<ReviewDto> reviewDtos = reviewPage.map(element -> modelMapper.map(element, ReviewDto.class));
+        return ResponseEntity.status(Response.SC_OK).body(new ApiResponse(FeedbackMessage.FOUND, reviewDtos));
     }
 
     @PutMapping(UrlMapping.UPDATE_REVIEW)
@@ -88,8 +88,8 @@ public class ReviewController {
     }
 
     @GetMapping(UrlMapping.GET_AVERAGE_RATING)
-    public ResponseEntity<ApiResponse> getAverageRatingForVet(@PathVariable Long veterinarianId) {
-        double averageRating = reviewService.getAverageRatingForVet(veterinarianId);
+    public ResponseEntity<ApiResponse> getAverageRatingForVet(@PathVariable Long vetId) {
+        double averageRating = reviewService.getAverageRatingForVet(vetId);
         return ResponseEntity.status(Response.SC_OK).body(new ApiResponse(FeedbackMessage.FOUND, averageRating));
     }
 
