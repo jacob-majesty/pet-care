@@ -1,5 +1,6 @@
 package com.majesty.pet_care.service.user;
 
+import java.sql.SQLException;
 import java.util.List;
 
 import com.majesty.pet_care.dto.UserDto;
@@ -14,5 +15,6 @@ public interface IUserService {
     User findById(Long userId);
     void delete(Long userId);
     List<UserDto> getAllUsers();
+    UserDto getUserWithDetails(Long userId) throws SQLException;
 
 }

@@ -20,8 +20,8 @@ public class UserDto {
     private LocalDate createdAt;
     private List<AppointmentDto> appointments;
     private List<ReviewDto> reviews;
-    private long imageId;
-    private byte[] image;
+    private long photoId;
+    private byte[] photo;
     private double averageRating;
 
 }
