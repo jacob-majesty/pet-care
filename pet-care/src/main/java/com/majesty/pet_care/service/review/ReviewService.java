@@ -37,16 +37,16 @@ public class ReviewService implements IReviewService {
 
         // 2. Check if the reviewer has previously submitted a review for this doctor.
         Optional<Review> existingReview = reviewRepository
-                .findByReviewerIdAndVeterinarianId(reviewerId, veterinarianId);
+                .findByVeterinarianIdAndPatientId(reviewerId, veterinarianId);
         if (existingReview.isPresent()) {
             throw new IllegalArgumentException(FeedbackMessage.ALREADY_REVIEWED);
         }
 
-        //3.Check if the reviewer has gotten a completed appointment with this doctor.
+     /*    //3.Check if the reviewer has gotten a completed appointment with this doctor.
         boolean hadCompletedAppointment = appointmentRepository.existsByPatientIdAndVeterinarianIdAndStatus(reviewerId, veterinarianId, AppointmentStatus.COMPLETED);
         if (!hadCompletedAppointment) {
-            throw new IllegalStateException(FeedbackMessage.NOT_ALLOWED);
-        }
+            throw new IllegalStateException(FeedbackMessage.NOT_ALLOWED); 
+        } */
 
         //4 Get the veterinarian  from the database
         User veterinarian = userRepository.findById(veterinarianId)
