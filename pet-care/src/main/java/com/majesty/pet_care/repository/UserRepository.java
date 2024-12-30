@@ -18,7 +18,7 @@ public interface UserRepository extends JpaRepository<User, Long> {
      Optional<User> findByEmail(String email);
 
     @Modifying
-    @Query("UPDATE User u SET u.firstName = :firstName, u.lastName = :lastName, u.gender = :gender, u.phoneNumber = :phoneNumber WHERE u.id = :userId")
+    @Query("UPDATE User u SET u.firstName =:firstName, u.lastName =:lastName, u.gender =:gender, u.phoneNumber =:phoneNumber WHERE u.id =:userId")
    User updateUser(@Param("userId") Long userId,
                    @Param("firstName") String firstName,
                    @Param("lastName") String lastName,
@@ -26,6 +26,6 @@ public interface UserRepository extends JpaRepository<User, Long> {
                    @Param("phoneNumber") String phoneNumber);
 
 
-    List<Veterinarian> findAllByUserType(String vet);
+  List<Veterinarian> findAllByUserType(@Param ("vet") String vet);
 
 }

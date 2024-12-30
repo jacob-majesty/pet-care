@@ -9,6 +9,7 @@ import org.springframework.stereotype.Service;
 
 import com.majesty.pet_care.dto.EntityConverter;
 import com.majesty.pet_care.dto.UserDto;
+import com.majesty.pet_care.model.Appointment;
 import com.majesty.pet_care.model.Veterinarian;
 import com.majesty.pet_care.repository.AppointmentRepository;
 import com.majesty.pet_care.repository.ReviewRepository;
@@ -39,6 +40,41 @@ public class VeterinarianService implements IVeterinarianService {
                    .toList();
        }
 
+       @Override
+       public List<UserDto> findAvailableVetsForAppointment(String specialization, LocalDate date, LocalTime time){
+           List<Veterinarian> filteredVets = getAvailableVeterinarians(specialization, date, time);
+           return  filteredVets.stream()
+                   .map(this ::mapVeterinarianToUserDto)
+                   .toList();
+       }
+
+       private List<Veterinarian> getAvailableVeterinarians(String specialization, LocalDate date, LocalTime time){
+        List<Veterinarian> veterinarians = getVeterinariansBySpecialization(specialization);
+        return veterinarians.stream()
+                .filter(vet -> isVetAvailable(vet, date, time))
+                .toList();
+
+    }
+
+    private boolean isVetAvailable(Veterinarian veterinarian, LocalDate requestedDate, LocalTime requestedTime){
+        if(requestedDate != null && requestedTime != null){
+            LocalTime requestedEndTime = requestedTime.plusHours(2);
+            return appointmentRepository.findByVeterinarianAndAppointmentDate(veterinarian, requestedDate)
+                    .stream()
+                    .noneMatch(existingAppointment -> doesAppointmentOverLap(existingAppointment, requestedTime, requestedEndTime));
+        }
+        return true;
+    }
+
+    private boolean doesAppointmentOverLap(Appointment existingAppointment, LocalTime requestedStartTime, LocalTime requestedEndTime){
+        LocalTime existingStartTime = existingAppointment.getAppointmentTime();
+        LocalTime existingEndTime = existingStartTime.plusHours(2);
+        LocalTime unavailableStartTime = existingStartTime.minusHours(1);
+        LocalTime unavailableEndTime = existingEndTime.plusMinutes(170);
+        return !requestedStartTime.isBefore(unavailableStartTime) && !requestedEndTime.isAfter(unavailableEndTime);
+    }
+
+
 
 
 
@@ -62,17 +98,6 @@ public class VeterinarianService implements IVeterinarianService {
 
         return userDto;
      }
-
-
-
-
-
-
-    @Override
-    public List<UserDto> findAvailableVetsForAppointment(String specialization, LocalDate date, LocalTime time) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'findAvailableVetsForAppointment'");
-    }
 
 
 
