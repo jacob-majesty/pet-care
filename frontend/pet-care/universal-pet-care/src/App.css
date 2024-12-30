@@ -280,7 +280,8 @@
 
 /* End Admin Dashboard */
 
-/* Review styling */
+
+/* Review component styling */
 .review {
   color: rgb(88, 194, 247);
   font-size: 12px;
@@ -324,7 +325,9 @@ input[type="radio"] {
   max-width: 700px !important;
 }
 
-/* End review styling */
+/* End review component styling */
+
+
 
 
 /* appointment Pie chart cell coloration */
