@@ -13,19 +13,20 @@ import com.majesty.pet_care.model.Veterinarian;
 
 public interface UserRepository extends JpaRepository<User, Long> {
 
-    boolean existsByEmail(String email);
+  boolean existsByEmail(String email);
 
-     Optional<User> findByEmail(String email);
+  Optional<User> findByEmail(String email);
 
-    @Modifying
-    @Query("UPDATE User u SET u.firstName =:firstName, u.lastName =:lastName, u.gender =:gender, u.phoneNumber =:phoneNumber WHERE u.id =:userId")
-   User updateUser(@Param("userId") Long userId,
-                   @Param("firstName") String firstName,
-                   @Param("lastName") String lastName,
-                   @Param("gender") String gender,
-                   @Param("phoneNumber") String phoneNumber);
+  @Modifying
+  @Query("UPDATE User u SET u.firstName =:firstName, u.lastName =:lastName, u.gender =:gender, u.phoneNumber =:phoneNumber WHERE u.id =:userId")
+  User updateUser(@Param("userId") Long userId,
+      @Param("firstName") String firstName,
+      @Param("lastName") String lastName,
+      @Param("gender") String gender,
+      @Param("phoneNumber") String phoneNumber);
 
-
-  List<Veterinarian> findAllByUserType(@Param ("vet") String vet);
+  // Function modified
+  // List<User> findAllByUserType(String userType);
+  List<Veterinarian> findAllByUserType(String vet);
 
 }

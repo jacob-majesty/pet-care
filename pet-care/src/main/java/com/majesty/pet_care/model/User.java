@@ -24,7 +24,7 @@ import lombok.Setter;
 @AllArgsConstructor
 @NoArgsConstructor
 @Entity
-@Inheritance(strategy = InheritanceType.JOINED) 
+@Inheritance(strategy = InheritanceType.JOINED)
 public class User {
 
     @Id
@@ -37,7 +37,7 @@ public class User {
     private String phoneNumber;
     private String email;
     private String password;
-    private String UserType;
+    private String userType;
     private boolean isEnabled;
 
     @CreationTimestamp
@@ -55,8 +55,8 @@ public class User {
     @OneToOne(cascade = jakarta.persistence.CascadeType.ALL, fetch = jakarta.persistence.FetchType.EAGER, orphanRemoval = true)
     private Photo photo;
 
-    public void removeUserPhoto(){
-        if(this.getPhoto() != null){
+    public void removeUserPhoto() {
+        if (this.getPhoto() != null) {
             this.setPhoto(null);
         }
     }

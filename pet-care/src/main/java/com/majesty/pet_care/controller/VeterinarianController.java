@@ -21,6 +21,7 @@ import com.majesty.pet_care.utils.FeedbackMessage;
 import com.majesty.pet_care.utils.UrlMapping;
 
 import lombok.RequiredArgsConstructor;
+
 @CrossOrigin("http://localhost:5173")
 @RestController
 @RequestMapping(UrlMapping.VETERINARIANS)
@@ -29,30 +30,29 @@ public class VeterinarianController {
     private final IVeterinarianService veterinarianService;
     private final IAppointmentService appointmentService;
 
-
-     @GetMapping(UrlMapping.GET_ALL_VETERINARIANS)
-    public ResponseEntity<ApiResponse> getAllVeterinarians(){
+    @GetMapping(UrlMapping.GET_ALL_VETERINARIANS)
+    public ResponseEntity<ApiResponse> getAllVeterinarians() {
         List<UserDto> allVeterinarians = veterinarianService.getAllVeterinariansWithDetails();
-        return ResponseEntity.ok(new ApiResponse(FeedbackMessage.FOUND,allVeterinarians));
+        return ResponseEntity.ok(new ApiResponse(FeedbackMessage.FOUND, allVeterinarians));
     }
 
-     @GetMapping(UrlMapping.SEARCH_VETERINARIAN_FOR_APPOINTMENT)
+    @GetMapping(UrlMapping.SEARCH_VETERINARIAN_FOR_APPOINTMENT)
     public ResponseEntity<ApiResponse> searchVeterinariansForAppointment(
             @RequestParam(required = false) LocalDate date,
             @RequestParam(required = false) LocalTime time,
-            @RequestParam String specialization){
+            @RequestParam String specialization) {
 
         try {
-            List<UserDto> availableVeterinarians = veterinarianService.findAvailableVetsForAppointment(specialization, date, time);
-            if(availableVeterinarians.isEmpty()){
-                return ResponseEntity.status(Response.SC_NOT_FOUND).body(new ApiResponse(FeedbackMessage.NO_VETS_AVAILABLE, null));
+            List<UserDto> availableVeterinarians = veterinarianService.findAvailableVetsForAppointment(specialization,
+                    date, time);
+            if (availableVeterinarians.isEmpty()) {
+                return ResponseEntity.status(Response.SC_NOT_FOUND)
+                        .body(new ApiResponse(FeedbackMessage.NO_VETS_AVAILABLE, null));
             }
-            return ResponseEntity.ok(new ApiResponse(FeedbackMessage.FOUND,availableVeterinarians));
+            return ResponseEntity.ok(new ApiResponse(FeedbackMessage.FOUND, availableVeterinarians));
         } catch (ResourceNotFoundException e) {
-           return ResponseEntity.status(Response.SC_NOT_FOUND).body(new ApiResponse(e.getMessage(), null));
+            return ResponseEntity.status(Response.SC_NOT_FOUND).body(new ApiResponse(e.getMessage(), null));
         }
     }
-
-
 
 }

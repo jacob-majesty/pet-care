@@ -14,7 +14,7 @@ public class UserDto {
     private String gender;
     private String phoneNumber;
     private String email;
-    private String UserType;
+    private String userType;
     private boolean isEnabled;
     private String specialization;
     private LocalDate createdAt;
