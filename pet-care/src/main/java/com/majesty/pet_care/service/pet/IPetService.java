@@ -7,8 +7,16 @@ import com.majesty.pet_care.model.Pet;
 public interface IPetService {
 
     List<Pet> savePetsForAppointment(List<Pet> pets);
+
     Pet updatePet(Pet pet, long petId);
+
     void deletePet(long petId);
+
     Pet getPetById(long petId);
 
+    List<String> getPetTypes();
+
+    List<String> getPetColors();
+
+    List<String> getPetBreeds(String petType);
 }
