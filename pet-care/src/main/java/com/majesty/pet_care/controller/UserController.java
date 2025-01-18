@@ -1,8 +1,10 @@
 package com.majesty.pet_care.controller;
+
 import java.util.List;
 
 import org.apache.catalina.connector.Response;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -25,9 +27,9 @@ import com.majesty.pet_care.utils.UrlMapping;
 
 import lombok.RequiredArgsConstructor;
 
-
 @RequestMapping(UrlMapping.USERS)
 @RestController
+@CrossOrigin("http://localhost:5173")
 @RequiredArgsConstructor
 public class UserController {
 
@@ -39,7 +41,7 @@ public class UserController {
         try {
             User theUser = userService.register(request);
             UserDto registeredUser = entityConverter.mapEntityToDto(theUser, UserDto.class);
-            return ResponseEntity.ok(new ApiResponse(FeedbackMessage.CREATE_SUCCESS,registeredUser));
+            return ResponseEntity.ok(new ApiResponse(FeedbackMessage.CREATE_SUCCESS, registeredUser));
 
         } catch (AlreadyExistsException e) {
             return ResponseEntity.status(Response.SC_CONFLICT).body(new ApiResponse(e.getMessage(), null));
@@ -57,7 +59,7 @@ public class UserController {
         try {
             User user = userService.update(userId, request);
             UserDto userDto = entityConverter.mapEntityToDto(user, UserDto.class);
-            return ResponseEntity.ok(new ApiResponse(FeedbackMessage.UPDATE_SUCCESS,userDto));
+            return ResponseEntity.ok(new ApiResponse(FeedbackMessage.UPDATE_SUCCESS, userDto));
 
         } catch (ResourceNotFoundException e) {
             return ResponseEntity.status(Response.SC_NOT_FOUND).body(new ApiResponse(e.getMessage(), null));
@@ -66,15 +68,15 @@ public class UserController {
             return ResponseEntity.status(Response.SC_INTERNAL_SERVER_ERROR).body(new ApiResponse(e.getMessage(), null));
 
         }
-               
+
     }
 
     @GetMapping(UrlMapping.GET_USER_BY_ID)
     public ResponseEntity<ApiResponse> findById(@PathVariable Long userId) {
         try {
             UserDto userDto = userService.getUserWithDetails(userId);
-            //UserDto theUser = entityConverter.mapEntityToDto(user, UserDto.class);
-            return ResponseEntity.status(Response.SC_OK).body(new ApiResponse(FeedbackMessage.FOUND,userDto));
+            // UserDto theUser = entityConverter.mapEntityToDto(user, UserDto.class);
+            return ResponseEntity.status(Response.SC_OK).body(new ApiResponse(FeedbackMessage.FOUND, userDto));
 
         } catch (ResourceNotFoundException e) {
             return ResponseEntity.status(Response.SC_NOT_FOUND).body(new ApiResponse(e.getMessage(), null));
@@ -83,27 +85,27 @@ public class UserController {
             return ResponseEntity.status(Response.SC_INTERNAL_SERVER_ERROR).body(new ApiResponse(e.getMessage(), null));
 
         }
-   }
+    }
 
-   @DeleteMapping(UrlMapping.DELETE_USER_BY_ID)
-   public ResponseEntity<ApiResponse> delete(@PathVariable Long userId) {
+    @DeleteMapping(UrlMapping.DELETE_USER_BY_ID)
+    public ResponseEntity<ApiResponse> delete(@PathVariable Long userId) {
         try {
             userService.delete(userId);
-            return ResponseEntity.status(Response.SC_FOUND).body(new ApiResponse(FeedbackMessage.DELETE_SUCCESS,null));
+            return ResponseEntity.status(Response.SC_FOUND).body(new ApiResponse(FeedbackMessage.DELETE_SUCCESS, null));
 
         } catch (ResourceNotFoundException e) {
             return ResponseEntity.status(Response.SC_NOT_FOUND).body(new ApiResponse(e.getMessage(), null));
 
         } catch (Exception e) {
             return ResponseEntity.status(Response.SC_INTERNAL_SERVER_ERROR).body(new ApiResponse(e.getMessage(), null));
-            
+
         }
     }
 
     @GetMapping(UrlMapping.GET_ALL_USERS)
     public ResponseEntity<ApiResponse> getAllUsers() {
         List<UserDto> theUsers = userService.getAllUsers();
-        return ResponseEntity.status(Response.SC_FOUND).body(new ApiResponse(FeedbackMessage.FOUND,theUsers));
+        return ResponseEntity.status(Response.SC_FOUND).body(new ApiResponse(FeedbackMessage.FOUND, theUsers));
     }
 
 }
