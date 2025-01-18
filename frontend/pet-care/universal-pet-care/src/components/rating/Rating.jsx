@@ -43,7 +43,7 @@ const Rating = ({ veterinarianId, onReviewSubmit }) => {
     };
 
     try {
-      console.log("The riview info", reviewInfo);
+      console.log("The review info", reviewInfo);
       const response = await addReview(veterinarianId, reviewerId, reviewInfo);
       setSuccessMessage(response.message);
       setShowSuccessAlert(true);
