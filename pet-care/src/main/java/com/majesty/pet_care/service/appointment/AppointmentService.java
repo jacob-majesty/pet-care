@@ -20,7 +20,7 @@ import com.majesty.pet_care.repository.UserRepository;
 import com.majesty.pet_care.request.AppointmentUpdateRequest;
 import com.majesty.pet_care.request.BookAppointmentRequest;
 import com.majesty.pet_care.service.pet.IPetService;
-
+import com.majesty.pet_care.utils.FeedbackMessage;
 
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
@@ -35,48 +35,48 @@ public class AppointmentService implements IAppointmentService {
     private final EntityConverter<Appointment, AppointmentDto> entityConverter;
     private final EntityConverter<Pet, PetDto> petEntityConverter;
 
-
-
     @Transactional
     @Override
     public Appointment createAppointment(BookAppointmentRequest request, Long senderId, Long recipientId) {
-    
-                Optional<User> sender = userRepository.findById(senderId);
-                Optional<User> recipient = userRepository.findById(recipientId);
 
-                if (sender.isPresent() && recipient.isPresent()) {
-                    Appointment appointment = request.getAppointment();
-                    List<Pet> pets = request.getPets();
-                    pets.forEach(pet -> pet.setAppointment(appointment));
-                    List<Pet> savedPets = petService.savePetsForAppointment(pets);
-                    appointment.setPets(savedPets);
+        Optional<User> sender = userRepository.findById(senderId);
+        Optional<User> recipient = userRepository.findById(recipientId);
 
-                    appointment.addPatient(sender.get());
-                    appointment.addVeterinarian(recipient.get());
-                    appointment.setAppointmentNo();
-                    appointment.setStatus(AppointmentStatus.WAITING_FOR_APPROVAL);
-                    return appointmentRepository.save(appointment);
-                }
+        if (sender.isPresent() && recipient.isPresent()) {
+            Appointment appointment = request.getAppointment();
+            List<Pet> pets = request.getPets();
+            pets.forEach(pet -> pet.setAppointment(appointment));
+            List<Pet> savedPets = petService.savePetsForAppointment(pets);
+            appointment.setPets(savedPets);
+
+            appointment.addPatient(sender.get());
+            appointment.addVeterinarian(recipient.get());
+            appointment.setAppointmentNo();
+            appointment.setStatus(AppointmentStatus.WAITING_FOR_APPROVAL);
+            return appointmentRepository.save(appointment);
+        }
         throw new ResourceNotFoundException("Sender or recipient not found");
     }
 
     @Override
     public List<Appointment> getAllAppointments() {
         return (List<Appointment>) appointmentRepository.findAll();
-        
+
     }
 
     @Override
     public void deleteAppointment(Long id) {
         appointmentRepository.findById(id)
-            .ifPresentOrElse(appointmentRepository::delete, () ->{ throw new ResourceNotFoundException("Appointment not found");});
-        
+                .ifPresentOrElse(appointmentRepository::delete, () -> {
+                    throw new ResourceNotFoundException("Appointment not found");
+                });
+
     }
 
     @Override
     public Appointment getAppointmentById(Long id) {
         return appointmentRepository.findById(id)
-            .orElseThrow(() -> new ResourceNotFoundException("Appointment not found"));
+                .orElseThrow(() -> new ResourceNotFoundException("Appointment not found"));
     }
 
     @Override
@@ -88,13 +88,13 @@ public class AppointmentService implements IAppointmentService {
     public Appointment updateAppointment(Long id, AppointmentUpdateRequest request) {
 
         Appointment existingAppointment = getAppointmentById(id);
-        if(!Objects.equals(existingAppointment.getStatus(), AppointmentStatus.WAITING_FOR_APPROVAL)) {
+        if (!Objects.equals(existingAppointment.getStatus(), AppointmentStatus.WAITING_FOR_APPROVAL)) {
             throw new IllegalStateException("Sorry, this appointment can no longer be updated.");
         }
         existingAppointment.setAppointmentDate(LocalDate.parse(request.getAppointmentDate()));
         existingAppointment.setAppointmentTime(LocalTime.parse(request.getAppointmentTime()));
         existingAppointment.setReason(request.getReason());
-        
+
         return appointmentRepository.save(existingAppointment);
     }
 
@@ -110,6 +110,37 @@ public class AppointmentService implements IAppointmentService {
                     appointmentDto.setPets(petDto);
                     return appointmentDto;
                 }).toList();
+    }
+
+    @Override
+    public Appointment cancelAppointment(Long appointmentId) {
+        return appointmentRepository.findById(appointmentId)
+                .filter(appointment -> appointment.getStatus().equals(AppointmentStatus.WAITING_FOR_APPROVAL))
+                .map(appointment -> {
+                    appointment.setStatus(AppointmentStatus.CANCELED);
+                    return appointmentRepository.saveAndFlush(appointment);
+                }).orElseThrow(() -> new IllegalStateException(FeedbackMessage.APPOINTMENT_CANNOT_BE_CANCELLED));
+
+    }
+
+    @Override
+    public Appointment approveAppointment(Long appointmentId) {
+        return appointmentRepository.findById(appointmentId)
+                .filter(appointment -> !appointment.getStatus().equals(AppointmentStatus.APPROVED))
+                .map(appointment -> {
+                    appointment.setStatus(AppointmentStatus.APPROVED);
+                    return appointmentRepository.saveAndFlush(appointment);
+                }).orElseThrow(() -> new IllegalStateException(FeedbackMessage.APPOINTMENT_ALREADY_APPROVED));
+
+    }
+
+    @Override
+    public Appointment declineAppointment(Long appointmentId) {
+        return appointmentRepository.findById(appointmentId)
+                .map(appointment -> {
+                    appointment.setStatus(AppointmentStatus.NOT_APPROVED);
+                    return appointmentRepository.saveAndFlush(appointment);
+                }).orElseThrow(() -> new ResourceNotFoundException(FeedbackMessage.RESOURCE_NOT_FOUND));
 
     }
 
