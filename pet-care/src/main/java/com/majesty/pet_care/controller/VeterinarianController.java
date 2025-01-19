@@ -55,4 +55,14 @@ public class VeterinarianController {
         }
     }
 
+    @GetMapping(UrlMapping.GET_ALL_SPECIALIZATIONS)
+    public ResponseEntity<ApiResponse> getAllSpecializations() {
+        try {
+            List<String> specializations = veterinarianService.getSpecializations();
+            return ResponseEntity.ok(new ApiResponse(FeedbackMessage.FOUND, specializations));
+        } catch (Exception e) {
+            return ResponseEntity.status(Response.SC_INTERNAL_SERVER_ERROR).body(new ApiResponse(e.getMessage(), null));
+        }
+    }
+
 }
