@@ -18,9 +18,11 @@ import com.majesty.pet_care.dto.UserDto;
 import com.majesty.pet_care.exception.ResourceNotFoundException;
 import com.majesty.pet_care.exception.AlreadyExistsException;
 import com.majesty.pet_care.model.User;
+import com.majesty.pet_care.request.ChangePasswordRequest;
 import com.majesty.pet_care.request.RegistrationRequest;
 import com.majesty.pet_care.request.UserUpdateRequest;
 import com.majesty.pet_care.response.ApiResponse;
+import com.majesty.pet_care.service.password.IChangePasswordService;
 import com.majesty.pet_care.service.user.UserService;
 import com.majesty.pet_care.utils.FeedbackMessage;
 import com.majesty.pet_care.utils.UrlMapping;
@@ -35,6 +37,7 @@ public class UserController {
 
     private final UserService userService;
     private final EntityConverter<User, UserDto> entityConverter;
+    private final IChangePasswordService changePasswordService;
 
     @PostMapping(UrlMapping.REGISTER_USER)
     public ResponseEntity<ApiResponse> register(@RequestBody RegistrationRequest request) {
@@ -106,6 +109,21 @@ public class UserController {
     public ResponseEntity<ApiResponse> getAllUsers() {
         List<UserDto> theUsers = userService.getAllUsers();
         return ResponseEntity.status(Response.SC_FOUND).body(new ApiResponse(FeedbackMessage.FOUND, theUsers));
+    }
+
+    @PutMapping(UrlMapping.CHANGE_PASSWORD)
+    public ResponseEntity<ApiResponse> changePassword(@PathVariable Long userId,
+            @RequestBody ChangePasswordRequest request) {
+        try {
+            changePasswordService.changePassword(userId, request);
+            return ResponseEntity.ok(new ApiResponse(FeedbackMessage.CREATE_SUCCESS, null));
+        } catch (IllegalArgumentException e) {
+            return ResponseEntity.badRequest().body(new ApiResponse(e.getMessage(), null));
+        } catch (ResourceNotFoundException e) {
+            return ResponseEntity.status(Response.SC_NOT_FOUND).body(new ApiResponse(e.getMessage(), null));
+        } catch (Exception e) {
+            return ResponseEntity.status(Response.SC_INTERNAL_SERVER_ERROR).body(new ApiResponse(e.getMessage(), null));
+        }
     }
 
 }
