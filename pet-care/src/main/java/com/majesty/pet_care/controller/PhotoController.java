@@ -1,9 +1,11 @@
 package com.majesty.pet_care.controller;
+
 import java.io.IOException;
 import java.sql.SQLException;
 
 import org.apache.catalina.connector.Response;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -25,6 +27,7 @@ import com.majesty.pet_care.utils.FeedbackMessage;
 import lombok.RequiredArgsConstructor;
 
 @RestController
+@CrossOrigin("http://localhost:5173")
 @RequestMapping(UrlMapping.PHOTOS)
 @RequiredArgsConstructor
 public class PhotoController {
@@ -37,7 +40,8 @@ public class PhotoController {
             @RequestParam Long userId) throws SQLException, IOException {
         try {
             Photo photo = photoService.savePhoto(file, userId);
-            return ResponseEntity.status(Response.SC_CREATED).body(new ApiResponse(FeedbackMessage.CREATE_SUCCESS, photo.getId()));
+            return ResponseEntity.status(Response.SC_CREATED)
+                    .body(new ApiResponse(FeedbackMessage.CREATE_SUCCESS, photo.getId()));
         } catch (IOException | SQLException e) {
             return ResponseEntity.status(Response.SC_INTERNAL_SERVER_ERROR).body(new ApiResponse(e.getMessage(), null));
         }
@@ -49,40 +53,46 @@ public class PhotoController {
             Photo photo = photoService.getPhotoById(photoId);
             if (photo != null) {
                 byte[] photoBytes = photoService.getImageData(photo.getId());
-            return ResponseEntity.status(Response.SC_OK).body(new ApiResponse(FeedbackMessage.FOUND, photoBytes));
+                return ResponseEntity.status(Response.SC_OK).body(new ApiResponse(FeedbackMessage.FOUND, photoBytes));
             }
         } catch (ResourceNotFoundException | SQLException e) {
             return ResponseEntity.status(Response.SC_NOT_FOUND).body(new ApiResponse(FeedbackMessage.NOT_FOUND, null));
         }
-        return ResponseEntity.status(Response.SC_INTERNAL_SERVER_ERROR).body(new ApiResponse(FeedbackMessage.NOT_FOUND, null));
-    }      
+        return ResponseEntity.status(Response.SC_INTERNAL_SERVER_ERROR)
+                .body(new ApiResponse(FeedbackMessage.NOT_FOUND, null));
+    }
 
     @DeleteMapping(UrlMapping.DELETE_PHOTO)
-    public ResponseEntity<ApiResponse> deletePhoto(@PathVariable Long photoId, @PathVariable Long userId) throws IOException, SQLException {
+    public ResponseEntity<ApiResponse> deletePhoto(@PathVariable Long photoId, @PathVariable Long userId)
+            throws IOException, SQLException {
         try {
             Photo photo = photoService.getPhotoById(photoId);
             if (photo != null) {
                 photoService.deletePhoto(photo.getId(), userId);
-            return ResponseEntity.status(Response.SC_OK).body(new ApiResponse(FeedbackMessage.DELETE_SUCCESS, photo.getId()));
-            }
-        } catch (ResourceNotFoundException | SQLException e) {
-        return ResponseEntity.status(Response.SC_NOT_FOUND).body(new ApiResponse(FeedbackMessage.NOT_FOUND, null));
-        }
-        return ResponseEntity.status(Response.SC_INTERNAL_SERVER_ERROR).body(new ApiResponse(FeedbackMessage.NOT_FOUND, null));
-    }
-
-
-    @PutMapping(UrlMapping.UPDATE_PHOTO)
-    public ResponseEntity<ApiResponse> updatePhoto(@PathVariable Long photoId, @RequestBody MultipartFile file) throws IOException, SQLException {
-        try {
-            Photo photo = photoService.getPhotoById(photoId);
-            if (photo != null) {
-                Photo updatedPhoto = photoService.updatePhoto(photo.getId(), file);
-                return ResponseEntity.status(Response.SC_OK).body(new ApiResponse(FeedbackMessage.UPDATE_SUCCESS, updatedPhoto.getId()));
+                return ResponseEntity.status(Response.SC_OK)
+                        .body(new ApiResponse(FeedbackMessage.DELETE_SUCCESS, photo.getId()));
             }
         } catch (ResourceNotFoundException | SQLException e) {
             return ResponseEntity.status(Response.SC_NOT_FOUND).body(new ApiResponse(FeedbackMessage.NOT_FOUND, null));
         }
-            return ResponseEntity.status(Response.SC_INTERNAL_SERVER_ERROR).body(new ApiResponse(FeedbackMessage.NOT_FOUND, null));
+        return ResponseEntity.status(Response.SC_INTERNAL_SERVER_ERROR)
+                .body(new ApiResponse(FeedbackMessage.NOT_FOUND, null));
+    }
+
+    @PutMapping(UrlMapping.UPDATE_PHOTO)
+    public ResponseEntity<ApiResponse> updatePhoto(@PathVariable Long photoId, @RequestBody MultipartFile file)
+            throws IOException, SQLException {
+        try {
+            Photo photo = photoService.getPhotoById(photoId);
+            if (photo != null) {
+                Photo updatedPhoto = photoService.updatePhoto(photo.getId(), file);
+                return ResponseEntity.status(Response.SC_OK)
+                        .body(new ApiResponse(FeedbackMessage.UPDATE_SUCCESS, updatedPhoto.getId()));
+            }
+        } catch (ResourceNotFoundException | SQLException e) {
+            return ResponseEntity.status(Response.SC_NOT_FOUND).body(new ApiResponse(FeedbackMessage.NOT_FOUND, null));
         }
+        return ResponseEntity.status(Response.SC_INTERNAL_SERVER_ERROR)
+                .body(new ApiResponse(FeedbackMessage.NOT_FOUND, null));
+    }
 }
