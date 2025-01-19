@@ -1,6 +1,7 @@
 package com.majesty.pet_care.service.user;
 
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -14,8 +15,10 @@ import com.majesty.pet_care.dto.ReviewDto;
 import com.majesty.pet_care.dto.UserDto;
 import com.majesty.pet_care.exception.ResourceNotFoundException;
 import com.majesty.pet_care.factory.UserFactory;
+import com.majesty.pet_care.model.Appointment;
 import com.majesty.pet_care.model.Review;
 import com.majesty.pet_care.model.User;
+import com.majesty.pet_care.repository.AppointmentRepository;
 import com.majesty.pet_care.repository.ReviewRepository;
 import com.majesty.pet_care.repository.UserRepository;
 import com.majesty.pet_care.request.RegistrationRequest;
@@ -24,6 +27,7 @@ import com.majesty.pet_care.service.appointment.AppointmentService;
 import com.majesty.pet_care.service.pet.IPetService;
 import com.majesty.pet_care.service.photo.PhotoService;
 import com.majesty.pet_care.service.review.ReviewService;
+import com.majesty.pet_care.utils.FeedbackMessage;
 import com.majesty.pet_care.dto.ReviewDto;
 import com.majesty.pet_care.dto.UserDto;
 
@@ -42,6 +46,7 @@ public class UserService implements IUserService {
     private final ReviewService reviewService;
     private final EntityConverter<User, UserDto> userEntityConverter;
     private final ReviewRepository reviewRepository;
+    private final AppointmentRepository appointmentRepository;
 
     @Override
     public User register(@RequestBody RegistrationRequest request) {
@@ -68,10 +73,16 @@ public class UserService implements IUserService {
     @Override
     public void delete(Long userId) {
         userRepository.findById(userId)
-                .ifPresentOrElse(userRepository::delete, () -> {
-                    throw new ResourceNotFoundException("User not found");
-                });
+                .ifPresentOrElse(userToDelete -> {
+                    List<Review> reviews = new ArrayList<>(reviewRepository.findAllByUserId(userId));
+                    reviewRepository.deleteAll(reviews);
+                    List<Appointment> appointments = new ArrayList<>(appointmentRepository.findAllByUserId(userId));
+                    appointmentRepository.deleteAll(appointments);
+                    userRepository.deleteById(userId);
 
+                }, () -> {
+                    throw new ResourceNotFoundException(FeedbackMessage.NOT_FOUND);
+                });
     }
 
     @Override
