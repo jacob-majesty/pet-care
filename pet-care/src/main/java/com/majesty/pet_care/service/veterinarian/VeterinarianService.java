@@ -42,6 +42,11 @@ public class VeterinarianService implements IVeterinarianService {
     }
 
     @Override
+    public List<String> getSpecializations() {
+        return veterinarianRepository.getSpecializations();
+    }
+
+    @Override
     public List<UserDto> findAvailableVetsForAppointment(String specialization, LocalDate date, LocalTime time) {
         List<Veterinarian> filteredVets = getAvailableVeterinarians(specialization, date, time);
         return filteredVets.stream()
