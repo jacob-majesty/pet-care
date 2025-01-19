@@ -29,9 +29,9 @@ import com.majesty.pet_care.utils.UrlMapping;
 
 import lombok.RequiredArgsConstructor;
 
+@CrossOrigin("http://localhost:5173")
 @RequestMapping(UrlMapping.USERS)
 @RestController
-@CrossOrigin("http://localhost:5173")
 @RequiredArgsConstructor
 public class UserController {
 

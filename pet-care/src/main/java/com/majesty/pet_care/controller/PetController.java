@@ -25,8 +25,8 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 
-@RestController
 @CrossOrigin("http://localhost:5173")
+@RestController
 @RequestMapping(UrlMapping.PETS)
 @RequiredArgsConstructor
 public class PetController {
