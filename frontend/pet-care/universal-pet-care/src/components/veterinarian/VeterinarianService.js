@@ -23,3 +23,12 @@ export async function findAvailableVeterinarians(searchParams) {
     throw error;
   }
 }
+
+export const getAllSpecializations = async () => {
+  try {
+    const response = await api.get("/veterinarians/vet/get-all-specialization");
+    return response.data;
+  } catch (error) {
+    throw error;
+  }
+};
