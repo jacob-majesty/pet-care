@@ -48,7 +48,7 @@ const Home = () => {
         </Col>
 
         <Col md={6} className='mb-3'>
-          <Card className="service-card">
+          <Card className='service-card'>
             <Card.Img
               variant='top'
               src={vett}
@@ -81,7 +81,9 @@ const Home = () => {
           <span className='text-info'> Universal Pet Care</span> Veterinarians
         </h4>
         <hr />
-        <p className="text-center">Here, we are going to be sliding veterinarians across</p>
+        <p className='text-center'>
+          Here, we are going to be sliding veterinarians across this area
+        </p>
       </div>
     </Container>
   );
