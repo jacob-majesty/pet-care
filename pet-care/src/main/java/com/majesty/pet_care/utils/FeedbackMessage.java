@@ -22,4 +22,6 @@ public class FeedbackMessage {
     public static final String PASSWORD_MISMATCH = "Password confirmation mismatch";
     public static final String APPOINTMENT_CANNOT_BE_CANCELLED = "Error cancelling appointment";
     public static final String APPOINTMENT_ALREADY_APPROVED = "This appointment is already approved";
+    public static final String ADDED_SUCCESS = "Pet added to appointment successfully";
+
 }

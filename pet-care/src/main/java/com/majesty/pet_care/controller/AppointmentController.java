@@ -1,6 +1,7 @@
 package com.majesty.pet_care.controller;
 
 import java.util.List;
+import java.util.Map;
 
 import org.apache.catalina.connector.Response;
 import org.springframework.http.ResponseEntity;
@@ -157,6 +158,23 @@ public class AppointmentController {
             return ResponseEntity.ok(new ApiResponse(FeedbackMessage.UPDATE_SUCCESS, appointment));
         } catch (IllegalStateException e) {
             return ResponseEntity.status(Response.SC_NOT_ACCEPTABLE).body(new ApiResponse(e.getMessage(), null));
+        }
+    }
+
+    @GetMapping(UrlMapping.COUNT_APPOINTMENT)
+    public long countAppointments() {
+        return appointmentService.countAppointment();
+    }
+
+    @GetMapping("/summary/appointments-summary")
+    public ResponseEntity<ApiResponse> getAppointmentSummary() {
+        try {
+            List<Map<String, Object>> summary = appointmentService.getAppointmentSummary();
+            return ResponseEntity.ok(new ApiResponse("Appointment summary retrieved successfully", summary));
+        } catch (Exception e) {
+            return ResponseEntity.status(
+                    Response.SC_INTERNAL_SERVER_ERROR)
+                    .body(new ApiResponse("Error retrieving appointment summary: " + e.getMessage(), null));
         }
     }
 
