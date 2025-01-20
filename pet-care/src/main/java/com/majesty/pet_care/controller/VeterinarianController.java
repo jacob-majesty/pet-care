@@ -3,6 +3,7 @@ package com.majesty.pet_care.controller;
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.List;
+import java.util.Map;
 
 import org.apache.catalina.connector.Response;
 import org.springframework.http.ResponseEntity;
@@ -63,6 +64,12 @@ public class VeterinarianController {
         } catch (Exception e) {
             return ResponseEntity.status(Response.SC_INTERNAL_SERVER_ERROR).body(new ApiResponse(e.getMessage(), null));
         }
+    }
+
+    @GetMapping(UrlMapping.VET_AGGREGATE_BY_SPECIALIZATION)
+    public ResponseEntity<List<Map<String, Object>>> aggregateVetsBySpecialization() {
+        List<Map<String, Object>> aggregatedVets = veterinarianService.aggregateVetsBySpecialization();
+        return ResponseEntity.ok(aggregatedVets);
     }
 
 }
