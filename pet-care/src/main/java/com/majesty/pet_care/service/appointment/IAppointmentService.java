@@ -1,6 +1,7 @@
 package com.majesty.pet_care.service.appointment;
 
 import java.util.List;
+import java.util.Map;
 
 import com.majesty.pet_care.dto.AppointmentDto;
 import com.majesty.pet_care.model.Appointment;
@@ -28,4 +29,8 @@ public interface IAppointmentService {
     Appointment approveAppointment(Long appointmentId);
 
     Appointment declineAppointment(Long appointmentId);
+
+    long countAppointment();
+
+    List<Map<String, Object>> getAppointmentSummary();
 }

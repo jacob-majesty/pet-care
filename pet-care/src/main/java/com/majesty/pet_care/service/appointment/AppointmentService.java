@@ -2,9 +2,13 @@ package com.majesty.pet_care.service.appointment;
 
 import java.time.LocalDate;
 import java.time.LocalTime;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Objects;
 import java.util.Optional;
+import java.util.stream.Collectors;
+
 import org.springframework.stereotype.Service;
 
 import com.majesty.pet_care.dto.AppointmentDto;
@@ -142,6 +146,34 @@ public class AppointmentService implements IAppointmentService {
                     return appointmentRepository.saveAndFlush(appointment);
                 }).orElseThrow(() -> new ResourceNotFoundException(FeedbackMessage.RESOURCE_NOT_FOUND));
 
+    }
+
+    @Override
+    public long countAppointment() {
+        return appointmentRepository.count();
+    }
+
+    @Override
+    public List<Map<String, Object>> getAppointmentSummary() {
+        return getAllAppointments()
+                .stream()
+                .collect(Collectors.groupingBy(Appointment::getStatus, Collectors.counting()))
+                .entrySet()
+                .stream()
+                .filter(entry -> entry.getValue() > 0)
+                .map(entry -> createStatusSummaryMap(entry.getKey(), entry.getValue()))
+                .collect(Collectors.toList());
+    }
+
+    private Map<String, Object> createStatusSummaryMap(AppointmentStatus status, Long value) {
+        Map<String, Object> summaryMap = new HashMap<>();
+        summaryMap.put("name", formatAppointmentStatus(status));
+        summaryMap.put("value", value);
+        return summaryMap;
+    }
+
+    private String formatAppointmentStatus(AppointmentStatus appointmentStatus) {
+        return appointmentStatus.toString().replace("_", "-").toLowerCase();
     }
 
 }
