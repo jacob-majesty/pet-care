@@ -11,11 +11,16 @@ public class UrlMapping {
     public static final String DELETE_USER_BY_ID = "/delete/{userId}";
     public static final String GET_ALL_USERS = "/all-users";
 
+    public static final String Count_All_USERS = "/count/users";
+    public static final String Count_All_VETS = "/count/veterinarians";
+    public static final String Count_All_PATIENTS = "/count/patients";
+    public static final String AGGREGATE_USERS = "/aggregated-users";
+
     /* Appointment API */
     public static final String APPOINTMENTS = API + "/appointments";
     public static final String ALL_APPOINTMENTS = "/all";
     public static final String GET_APPOINTMENT_BY_NO = "/appointment/{appointmentNo}";
-    public static final String GET_APPOINTMENT_BY_ID = "/appointment/{id}/appointment";
+    public static final String GET_APPOINTMENT_BY_ID = "/appointment/{id}/fetch/appointment";
     public static final String BOOK_APPOINTMENT = "/book-appointment";
     public static final String UPDATE_APPOINTMENT = "/appointment/{id}/update";
     public static final String DELETE_APPOINTMENT_BY_ID = "/appointment/{id}/delete";

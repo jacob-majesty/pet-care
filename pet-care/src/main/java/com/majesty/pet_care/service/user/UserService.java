@@ -1,9 +1,13 @@
 package com.majesty.pet_care.service.user;
 
 import java.sql.SQLException;
+import java.time.Month;
+import java.time.format.TextStyle;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 import java.util.stream.Collectors;
+import java.util.Map;
 
 import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Service;
@@ -187,6 +191,45 @@ public class UserService implements IUserService {
         } else {
             reviewDto.setVeterinarianImage(null);
         }
+    }
+
+    @Override
+    public long countVeterinarians() {
+        return userRepository.countByUserType("VET");
+    }
+
+    @Override
+    public long countPatients() {
+        return userRepository.countByUserType("PATIENT");
+    }
+
+    @Override
+    public long countAllUsers() {
+        return userRepository.count();
+    }
+
+    @Override
+    public Map<String, Map<String, Long>> aggregateUsersByMonthAndType() {
+        List<User> users = userRepository.findAll();
+        return users.stream().collect(Collectors.groupingBy(user -> Month.of(user.getCreatedAt().getMonthValue())
+                .getDisplayName(TextStyle.FULL, Locale.ENGLISH),
+                Collectors.groupingBy(User::getUserType, Collectors.counting())));
+    }
+
+    @Override
+    public Map<String, Map<String, Long>> aggregateUsersByEnabledStatusAndType() {
+        List<User> users = userRepository.findAll();
+        return users.stream()
+                .collect(Collectors.groupingBy(user -> user.isEnabled() ? "Enabled" : "Non-Enabled",
+                        Collectors.groupingBy(User::getUserType, Collectors.counting())));
+    }
+
+    public void lockUserAccount(Long userId) {
+        userRepository.updateUserEnabledStatus(userId, false);
+    }
+
+    public void unLockUserAccount(Long userId) {
+        userRepository.updateUserEnabledStatus(userId, true);
     }
 
 }
