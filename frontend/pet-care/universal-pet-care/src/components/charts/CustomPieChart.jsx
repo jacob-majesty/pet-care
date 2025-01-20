@@ -19,8 +19,7 @@ const CustomPieChart = ({
   const colors = useColorMapping();
 
   return (
-    <section className="mb-5 mt-5">
-      <h4 className='text-center mt-4'>Appointment Overview</h4>
+    <section className="mb-5 mt-5">     
       <ResponsiveContainer width={width} height={height}>
         <PieChart className="mt-4">
           <Pie

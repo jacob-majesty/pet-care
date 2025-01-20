@@ -76,6 +76,29 @@ export const getAppointmentById = async (appointmentId) => {
 };
 
 
+export async function countAppointments() {
+  try {
+    const result = await api.get("/appointments/count/appointments");
+    console.log("The result ", result.data);
+    return result.data;
+  } catch (error) {
+    throw error;
+  }
+}
+
+export const getAppointmentsSummary = async () => {
+  try {
+    const response = await api.get(
+      "/appointments/summary/appointments-summary"
+    );
+    return response.data;
+  } catch (error) {
+    throw error;
+  }
+};
+
+
+
 
 
 
