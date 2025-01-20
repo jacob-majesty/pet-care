@@ -33,7 +33,7 @@ const UserDashboard = () => {
   } = UseMessageAlerts();
 
   // const { userId } = useParams();
-  const userId = 4;
+  const userId = 7;
 
   useEffect(() => {
     const getUser = async () => {
@@ -155,7 +155,7 @@ const UserDashboard = () => {
           </Row>
         </Tab>
 
-        <Tab eventKey='reviews' title={<h3>Reviws</h3>}>
+        <Tab eventKey='reviews' title={<h3>Reviews</h3>}>
           <Container className='d-flex justify-content-center align-items-center'>
             <Card className='mt-5 mb-4 review-card'>
               <h4 className='text-center mb-2'>Your Reviews</h4>

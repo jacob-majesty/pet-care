@@ -37,7 +37,7 @@ const VeterinarianCard = ({ vet }) => {
           <Accordion.Body>
             <div>
               <Link to={""} className='link-2'>
-                See what peopple are saying about
+                See what people are saying about
               </Link>{" "}
               <span className='margin-left-space'>Dr.{vet.firstName}</span>
             </div>

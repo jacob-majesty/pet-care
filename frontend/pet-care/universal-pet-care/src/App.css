@@ -2,10 +2,10 @@
 
 .admin-body {
   margin: 0;
-  background-color: rgba(13, 14, 14, 0.947);
+  background-color: rgba(20, 18, 18, 0.947);
   color: var(--color-title);
   font-family: 'Montserrat', sans-serif;
-  height: 100vh;
+  height: auto;
 
 }
 
@@ -40,7 +40,7 @@
 
 .grid-container {
   display: grid;
-  grid-template-columns: 250px 1fr 1fr 1fr;
+  grid-template-columns: 300px 1fr 1fr;
   grid-template-rows: 0.2fr 3fr;
   grid-template-areas:
     'sidebar header header header'
@@ -134,7 +134,7 @@
 /* Main  */
 .main-container {
   grid-area: main;
-  overflow-y: auto;
+  overflow-y: scroll;
   padding: 20px;
   color: rgba(255, 255, 255, 0.95);
   margin-bottom: 20px;
@@ -206,13 +206,6 @@
 .chart-title {
   color: var(--color-title);
   font-size: 20px
-}
-
-.custom-tooltip {
-  background-color: #fff;
-  padding: 10px;
-  border: 1px solid #ccc;
-  color: black !important;
 }
 
 /* End Main  */
@@ -330,7 +323,7 @@ input[type="radio"] {
 
 
 
-/* appointment Pie chart cell coloration */
+/* appointment status colors assignment */
 :root {
   --color-on-going: #78b517;
   --color-up-coming: #af5fc5;
@@ -347,6 +340,7 @@ input[type="radio"] {
   --color-white: #ffffff;
   --color-primary: #87cefa;
   --user-dashboard-background: #f5f5f5e0;
+  --pet-entry-form-background: #f5f5f5;
   /* Default color */
 }
 
@@ -370,7 +364,7 @@ input[type="radio"] {
 .services-list {
   display: flex;
   flex-wrap: wrap;
-  gap: 20px;  
+  gap: 20px;
 }
 
 .service-card {
