@@ -1,6 +1,7 @@
 package com.majesty.pet_care.controller;
 
 import java.util.List;
+import java.util.Map;
 
 import org.apache.catalina.connector.Response;
 import org.springframework.http.ResponseEntity;
@@ -121,6 +122,61 @@ public class UserController {
             return ResponseEntity.badRequest().body(new ApiResponse(e.getMessage(), null));
         } catch (ResourceNotFoundException e) {
             return ResponseEntity.status(Response.SC_NOT_FOUND).body(new ApiResponse(e.getMessage(), null));
+        } catch (Exception e) {
+            return ResponseEntity.status(Response.SC_INTERNAL_SERVER_ERROR).body(new ApiResponse(e.getMessage(), null));
+        }
+    }
+
+    @GetMapping(UrlMapping.Count_All_VETS)
+    public long countVeterinarians() {
+        return userService.countVeterinarians();
+    }
+
+    @GetMapping(UrlMapping.Count_All_PATIENTS)
+    public long countPatients() {
+        return userService.countPatients();
+    }
+
+    @GetMapping(UrlMapping.Count_All_USERS)
+    public long countUsers() {
+        return userService.countAllUsers();
+    }
+
+    @GetMapping(UrlMapping.AGGREGATE_USERS)
+    public ResponseEntity<ApiResponse> aggregateUsersByMonthAndType() {
+        try {
+            Map<String, Map<String, Long>> aggregatedUsers = userService.aggregateUsersByMonthAndType();
+            return ResponseEntity.ok(new ApiResponse(FeedbackMessage.FOUND, aggregatedUsers));
+        } catch (Exception e) {
+            return ResponseEntity.status(Response.SC_INTERNAL_SERVER_ERROR).body(new ApiResponse(e.getMessage(), null));
+        }
+    }
+
+    @GetMapping("/account/aggregated-by-status")
+    public ResponseEntity<ApiResponse> getAggregatedUsersByEnabledStatus() {
+        try {
+            Map<String, Map<String, Long>> aggregatedData = userService.aggregateUsersByEnabledStatusAndType();
+            return ResponseEntity.ok(new ApiResponse(FeedbackMessage.FOUND, aggregatedData));
+        } catch (Exception e) {
+            return ResponseEntity.status(Response.SC_INTERNAL_SERVER_ERROR).body(new ApiResponse(e.getMessage(), null));
+        }
+    }
+
+    @PutMapping("/account/{userId}/lock-user-account")
+    public ResponseEntity<ApiResponse> lockUserAccount(@PathVariable Long userId) {
+        try {
+            userService.lockUserAccount(userId);
+            return ResponseEntity.ok(new ApiResponse("User account locked successfully", null));
+        } catch (Exception e) {
+            return ResponseEntity.status(Response.SC_INTERNAL_SERVER_ERROR).body(new ApiResponse(e.getMessage(), null));
+        }
+    }
+
+    @PutMapping("/account/{userId}/unLock-user-account")
+    public ResponseEntity<ApiResponse> unLockUserAccount(@PathVariable Long userId) {
+        try {
+            userService.unLockUserAccount(userId);
+            return ResponseEntity.ok(new ApiResponse("User account unlocked successfully", null));
         } catch (Exception e) {
             return ResponseEntity.status(Response.SC_INTERNAL_SERVER_ERROR).body(new ApiResponse(e.getMessage(), null));
         }

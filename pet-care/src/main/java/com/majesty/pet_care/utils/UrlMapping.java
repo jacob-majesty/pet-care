@@ -27,6 +27,7 @@ public class UrlMapping {
     public static final String CANCEL_APPOINTMENT = "/appointment/{id}/cancel";
     public static final String APPROVE_APPOINTMENT = "/appointment/{id}/approve";
     public static final String DECLINE_APPOINTMENT = "/appointment/{id}/decline";
+    public static final String COUNT_APPOINTMENT = "/count/appointments";
 
     /* Pet API */
     public static final String PETS = API + "/pets";
