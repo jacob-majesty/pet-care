@@ -61,7 +61,12 @@ public class UrlMapping {
     public static final String GET_ALL_SPECIALIZATIONS = "vet/get-all-specialization";
     public static final String VET_AGGREGATE_BY_SPECIALIZATION = "vet/get-by-specialization";
 
-    /* Change Password */
+    /* Auth API */
+
     public static final String CHANGE_PASSWORD = "/user/{userId}/change-password";
+    public static final String AUTH = "/api/v1/auth";
+    public static final String LOGIN = "/login";
+    public static final String REQUEST_PASSWORD_RESET = "/request-password-reset";
+    public static final String RESET_PASSWORD = "/reset-password";
 
 }
