@@ -4,9 +4,9 @@ import { Button, Form } from "react-bootstrap";
 import AlertMessage from "../common/AlertMessage";
 import UseMessageAlerts from "../hooks/UseMessageAlerts";
 import { addReview } from "../review/ReviewService";
-import { useParams } from "react-router-dom";
 
-const Rating = ({ veterinarianId, onReviewSubmit }) => {
+
+const Rating = ({veterinarianId, onReviewSubmit }) => {
   const [hover, setHover] = useState(null);
   const [rating, setRating] = useState(null);
   const [feedback, setFeedback] = useState("");
@@ -22,12 +22,11 @@ const Rating = ({ veterinarianId, onReviewSubmit }) => {
     setShowErrorAlert,
   } = UseMessageAlerts();
 
-  const reviewerId = 4;
+  const reviewerId = localStorage.getItem("userId");
+ 
 
-  // const{veterinarianId} = useParams()
-
-   const handleRatingChange = (value) => {  
-    setRating(value);  
+  const handleRatingChange = (value) => {
+    setRating(value);
   };
 
   const handleFeedbackChange = (e) => {
@@ -38,21 +37,30 @@ const Rating = ({ veterinarianId, onReviewSubmit }) => {
     e.preventDefault();
 
     const reviewInfo = {
-      rating: rating,
+      stars: rating,
       feedback: feedback,
     };
 
     try {
-      console.log("The review info", reviewInfo);
-      const response = await addReview(veterinarianId, reviewerId, reviewInfo);
-      setSuccessMessage(response.message);
-      setShowSuccessAlert(true);
-      if (onReviewSubmit) {
-        onReviewSubmit();
+      if (reviewerId) {
+          const response = await addReview(
+            veterinarianId,
+            reviewerId,
+            reviewInfo
+          );
+          setSuccessMessage(response.message);
+          setShowSuccessAlert(true);
+          if (onReviewSubmit) {
+            onReviewSubmit();
+          }
+      } else {
+        setErrorMessage("Please, login to submit a review");
+        setShowErrorAlert(true);
       }
-    } catch (error) {
-      setErrorMessage(error.message);
-      setShowErrorAlert(true);
+    
+    } catch (error) {  
+        setErrorMessage(error.response.data.message);
+        setShowErrorAlert(true);    
     }
   };
 
