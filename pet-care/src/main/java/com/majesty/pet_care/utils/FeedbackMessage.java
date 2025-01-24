@@ -86,4 +86,14 @@ public class FeedbackMessage {
     public static final String SUCCESS = "Success!";
     public static final String RESOURCE_FOUND = "Resource found";
 
+    /* User API */
+    public static final String CREATE_USER_SUCCESS = "User account created successfully";
+    public static final String DELETE_USER_SUCCESS = "User account deleted successfully";
+    public static final String USER_UPDATE_SUCCESS = "User updated successfully";
+    public static final String USER_FOUND = "User found";
+    public static final String USER_NOT_FOUND = "Sorry, user not found";
+    public static final String NO_USER_FOUND = "Oops!, no user found with : ";
+    public static final String LOCKED_ACCOUNT_SUCCESS = "Account locked successfully";
+    public static final String UNLOCKED_ACCOUNT_SUCCESS = "Account unlocked successfully";
+
 }
