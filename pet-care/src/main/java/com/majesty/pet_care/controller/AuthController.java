@@ -20,13 +20,18 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.majesty.pet_care.event.RegistrationCompleteEvent;
 import com.majesty.pet_care.exception.ResourceNotFoundException;
 import com.majesty.pet_care.model.User;
+import com.majesty.pet_care.model.VerificationToken;
 import com.majesty.pet_care.request.LoginRequest;
+import com.majesty.pet_care.request.PasswordResetRequest;
 import com.majesty.pet_care.response.ApiResponse;
 import com.majesty.pet_care.response.JwtResponse;
 import com.majesty.pet_care.security.jwt.JwtUtils;
 import com.majesty.pet_care.security.user.UPCUserDetails;
+import com.majesty.pet_care.service.password.PasswordResetService;
+import com.majesty.pet_care.service.token.VerificationTokenService;
 import com.majesty.pet_care.utils.FeedbackMessage;
 import com.majesty.pet_care.utils.UrlMapping;
 import org.springframework.http.HttpStatus;
