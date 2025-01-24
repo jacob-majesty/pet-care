@@ -25,15 +25,7 @@ const BookAppointment = () => {
     appointmentDate: "",
     appointmentTime: "",
     reason: "",
-    pets: [
-      {
-        petName: "",
-        petType: "",
-        petColor: "",
-        petBreed: "",
-        petAge: "",
-      },
-    ],
+    pets: [{}],
   });
 
   const {
@@ -48,7 +40,7 @@ const BookAppointment = () => {
   } = UseMessageAlerts();
 
   const { recipientId } = useParams();
-  const senderId = 3;
+  const senderId =  localStorage.getItem("userId");
 
   const handleDateChange = (date) => {
     setFormData((prevState) => ({
@@ -84,11 +76,11 @@ const BookAppointment = () => {
 
   const addPet = () => {
     const newPet = {
-      petName: "",
-      petType: "",
-      petColor: "",
-      petBreed: "",
-      petAge: "",
+      name: "",
+      type: "",
+      color: "",
+      breed: "",
+      age: "",
     };
     setFormData((prevState) => ({
       ...prevState,
@@ -115,11 +107,11 @@ const BookAppointment = () => {
     );
     // Constructing an array of pet objects from formData.pets
     const pets = formData.pets.map((pet) => ({
-      name: pet.petName,
-      type: pet.petType,
-      breed: pet.petBreed,
-      color: pet.petColor,
-      age: pet.petAge,
+      name: pet.name,
+      type: pet.type,
+      breed: pet.breed,
+      color: pet.color,
+      age: pet.age,
     }));
 
     const request = {
@@ -138,8 +130,13 @@ const BookAppointment = () => {
       handleReset();
       setShowSuccessAlert(true);
     } catch (error) {
-      setErrorMessage(error.response.data.message);
-      setShowErrorAlert(true);
+      if (error.response.data.status === 401) {
+        setErrorMessage("Please, login to book appointment");
+        setShowErrorAlert(true);
+      } else {
+        setErrorMessage(error.response.data.message);
+        setShowErrorAlert(true);
+      }
     } finally {
       setIsProcessing(false);
     }
@@ -152,11 +149,11 @@ const BookAppointment = () => {
       reason: "",
       pets: [
         {
-          petName: "",
-          petType: "",
-          petColor: "",
-          petBreed: "",
-          petAge: "",
+          name: "",
+          type: "",
+          color: "",
+          breed: "",
+          age: "",
         },
       ],
     });
@@ -167,7 +164,7 @@ const BookAppointment = () => {
   return (
     <Container className='mt-5'>
       <Row className='justify-content-center'>
-        <Col lg={6} md={8} sm={12}>
+        <Col lg={6} md={10} sm={12}>
           <Form onSubmit={handleSubmit}>
             <Card className='shadow mb-5'>
               <Card.Header as='h5' className='text-center'>

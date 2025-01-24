@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.Map;
 
 import org.apache.catalina.connector.Response;
+import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -16,6 +17,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import com.majesty.pet_care.dto.EntityConverter;
 import com.majesty.pet_care.dto.UserDto;
+import com.majesty.pet_care.event.RegistrationCompleteEvent;
 import com.majesty.pet_care.exception.ResourceNotFoundException;
 import com.majesty.pet_care.exception.AlreadyExistsException;
 import com.majesty.pet_care.model.User;
@@ -39,11 +41,13 @@ public class UserController {
     private final UserService userService;
     private final EntityConverter<User, UserDto> entityConverter;
     private final IChangePasswordService changePasswordService;
+    private final ApplicationEventPublisher publisher;
 
     @PostMapping(UrlMapping.REGISTER_USER)
     public ResponseEntity<ApiResponse> register(@RequestBody RegistrationRequest request) {
         try {
             User theUser = userService.register(request);
+            publisher.publishEvent(new RegistrationCompleteEvent(theUser));
             UserDto registeredUser = entityConverter.mapEntityToDto(theUser, UserDto.class);
             return ResponseEntity.ok(new ApiResponse(FeedbackMessage.CREATE_SUCCESS, registeredUser));
 

@@ -4,10 +4,13 @@ import java.util.List;
 import java.util.Map;
 
 import org.apache.catalina.connector.Response;
+import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.majesty.pet_care.event.AppointmentApprovedEvent;
+import com.majesty.pet_care.event.AppointmentBookedEvent;
 import com.majesty.pet_care.exception.ResourceNotFoundException;
 import com.majesty.pet_care.model.Appointment;
 import com.majesty.pet_care.request.AppointmentUpdateRequest;
@@ -35,6 +38,7 @@ import org.springframework.web.bind.annotation.PutMapping;
 public class AppointmentController {
 
     private final AppointmentService appointmentService;
+    private final ApplicationEventPublisher publisher;
 
     @GetMapping(UrlMapping.ALL_APPOINTMENTS)
     public ResponseEntity<ApiResponse> getAllAppointments() {
@@ -55,6 +59,8 @@ public class AppointmentController {
 
         try {
             Appointment theAppointment = appointmentService.createAppointment(request, senderId, recipientId);
+            publisher.publishEvent(new AppointmentBookedEvent(theAppointment));
+
             return ResponseEntity.status(Response.SC_OK)
                     .body(new ApiResponse(FeedbackMessage.CREATE_SUCCESS, theAppointment));
 
@@ -135,6 +141,7 @@ public class AppointmentController {
     public ResponseEntity<ApiResponse> declineAppointment(@PathVariable Long id) {
         try {
             Appointment appointment = appointmentService.declineAppointment(id);
+            publisher.publishEvent(new AppointmentApprovedEvent(appointment));
             return ResponseEntity.ok(new ApiResponse(FeedbackMessage.UPDATE_SUCCESS, appointment));
         } catch (ResourceNotFoundException e) {
             return ResponseEntity.status(Response.SC_NOT_FOUND).body(new ApiResponse(e.getMessage(), null));
@@ -145,6 +152,7 @@ public class AppointmentController {
     public ResponseEntity<ApiResponse> approveAppointment(@PathVariable Long id) {
         try {
             Appointment appointment = appointmentService.approveAppointment(id);
+            publisher.publishEvent(new AppointmentApprovedEvent(appointment));
             return ResponseEntity.ok(new ApiResponse(FeedbackMessage.UPDATE_SUCCESS, appointment));
         } catch (IllegalStateException e) {
             return ResponseEntity.status(Response.SC_NOT_ACCEPTABLE).body(new ApiResponse(e.getMessage(), null));

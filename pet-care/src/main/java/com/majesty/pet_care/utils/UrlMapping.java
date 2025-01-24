@@ -61,7 +61,26 @@ public class UrlMapping {
     public static final String GET_ALL_SPECIALIZATIONS = "vet/get-all-specialization";
     public static final String VET_AGGREGATE_BY_SPECIALIZATION = "vet/get-by-specialization";
 
-    /* Change Password */
+    /* Auth API */
+
     public static final String CHANGE_PASSWORD = "/user/{userId}/change-password";
+    public static final String AUTH = "/api/v1/auth";
+    public static final String LOGIN = "/login";
+    public static final String REQUEST_PASSWORD_RESET = "/request-password-reset";
+    public static final String RESET_PASSWORD = "/reset-password";
+
+    /* Patient API */
+    public static final String PATIENTS = API + "/patients";
+    public static final String GET_ALL_PATIENTS = "/get-all-patients";
+
+    /* Token API */
+    public static final String TOKEN_VERIFICATION = API + "/verification";
+    public static final String VALIDATE_TOKEN = "/validate-token";
+    public static final String CHECK_TOKEN_EXPIRATION = "/check-token-expiration";
+    public static final String SAVE_TOKEN = "/user/save-token";
+    public static final String GENERATE_NEW_TOKEN_FOR_USER = "/generate-new-token";
+    public static final String DELETE_TOKEN = "/delete-token";
+    public static final String VERIFY_EMAIL = "/verify-your-email";
+    public static final String RESEND_VERIFICATION_TOKEN = "/resend-verification-token";
 
 }
