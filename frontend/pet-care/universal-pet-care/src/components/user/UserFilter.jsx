@@ -15,7 +15,7 @@ const UserFilter = ({
         className='form-control'
         value={selectedValue}
         onChange={(e) => onSelectedValue(e.target.value)}>
-        <option value=''>Select {label.toLowerCase()}</option>
+        <option value=''>...Select {label.toLowerCase()}...</option>
         {values.map((value, index) => (
           <option key={index} value={value}>
             {value}

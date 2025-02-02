@@ -4,6 +4,7 @@ import { Modal, Button, Form, InputGroup } from "react-bootstrap";
 import { updateUserPhoto, uploadUserPhoto } from "./ImageUploaderService";
 import UseMessageAlerts from "../hooks/UseMessageAlerts";
 import { getUserById } from "../user/UserService";
+import { useParams } from "react-router-dom";
 
 const ImageUploaderModal = ({ userId, show, handleClose }) => {
   const [file, setFile] = useState(null);
@@ -25,7 +26,7 @@ const ImageUploaderModal = ({ userId, show, handleClose }) => {
 
   const getUser = async () => {
     try {
-      const result = getUserById(3);
+      const result = getUserById(userId);
       setUser(result.data);
     } catch (error) {
       setErrorMessage(error.response.data.message);
@@ -36,6 +37,11 @@ const ImageUploaderModal = ({ userId, show, handleClose }) => {
   useEffect(() => {
     getUser();
   }, [userId]);
+
+  //1. get the user
+  //2. check if the user already got a photo
+  //3. if yes, then update the exisiting photo.
+  //else, create a new photo for the user
 
   const handleImageUpload = async (e) => {
     e.preventDefault();
@@ -53,24 +59,23 @@ const ImageUploaderModal = ({ userId, show, handleClose }) => {
           setSuccessMessage(response.data);
           window.location.reload();
           setShowSuccessAlert(true);
+          console.log(response.data);
         };
       } else {
-        const response = await uploadUserPhoto(3, file);
+        const response = await uploadUserPhoto(userId, file);
         setSuccessMessage(response.data);
         window.location.reload();
         setShowSuccessAlert(true);
+        console.log("Here :", response.data);
       }
     } catch (error) {
+      console.log(error);
       setErrorMessage(error.message);
       setShowErrorAlert(true);
       console.error(error.message);
     }
   };
 
-  //1. get the user
-  //2. check if the user already got a phot
-  //3. if yes, the update the exisiting photo.
-  //else, create a new photo for the user
   return (
     <Modal show={show} onHide={handleClose}>
       <Modal.Header closeButton>
@@ -88,10 +93,10 @@ const ImageUploaderModal = ({ userId, show, handleClose }) => {
         <Form>
           <h6>Select the photo you would like to display on your profile</h6>
           <InputGroup>
-            <Form.Control type='file' onChange={handleFileChange}/>
-              <Button variant='secondary' onClick={handleImageUpload}>
-                Upload
-              </Button>          
+            <Form.Control type='file' onChange={handleFileChange} />
+            <Button variant='secondary' onClick={handleImageUpload}>
+              Upload
+            </Button>
           </InputGroup>
         </Form>
       </Modal.Body>

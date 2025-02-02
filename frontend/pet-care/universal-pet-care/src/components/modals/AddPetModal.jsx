@@ -7,10 +7,10 @@ import PetColorSelector from "../pet/PetColorSelector";
 const AddPetModal = ({ show, onHide, onAddPet, appointmentId }) => {
   const [newPet, setNewPet] = useState({
     name: "",
+    age: "",
+    color: "",
     type: "",
     breed: "",
-    color: "",
-    age: "",
   });
 
   const handleInputChange = (event) => {
@@ -23,13 +23,7 @@ const AddPetModal = ({ show, onHide, onAddPet, appointmentId }) => {
 
   const handleAddPet = () => {
     onAddPet(appointmentId, newPet);
-    setNewPet({
-      name: "",
-      type: "",
-      breed: "",
-      color: "",
-      age: "",
-    });
+    console.log("New Pet Information: ", newPet);
   };
 
   return (
@@ -44,41 +38,42 @@ const AddPetModal = ({ show, onHide, onAddPet, appointmentId }) => {
             <Form.Control
               type='text'
               name='name'
-              value={newPet.petName}
+              value={newPet.name}
               onChange={handleInputChange}
             />
-            <Form.Group as={Col} className='mb-2 mt-2'>
-              <Form.Label>Color</Form.Label>
-              <PetColorSelector
-                value={newPet.petColor}
-                onChange={handleInputChange}
-              />
-            </Form.Group>
-            <h5 className='text-center'>Pet Type and Breed</h5>
-            <fieldset className='field-set mb-2'>            
-              <Form.Group as={Row} className='mb-2 d-flex'>
-                <Col>
-                  <PetTypeSelector
-                    value={newPet.petType}
-                    onChange={handleInputChange}
-                  />
-                </Col>
-                <Col>
-                  <PetBreedSelector
-                    petType={newPet.petType}
-                    value={newPet.petBreed}
-                    onChange={handleInputChange}
-                  />
-                </Col>
-              </Form.Group>
-            </fieldset>
+          </Form.Group>
+          <Form.Group controlId='petColor'>
+            <Form.Label>Color</Form.Label>
+            <PetColorSelector
+              name='color'
+              value={newPet.petColor}
+              onChange={handleInputChange}
+            />
+          </Form.Group>
+          <h5 className='text-center'>Pet Type and Breed</h5>
+          <Form.Group controlId='petType'>
+            <Form.Label>Type</Form.Label>
+            <PetTypeSelector
+              name='type'
+              value={newPet.type}
+              onChange={handleInputChange}
+            />
+          </Form.Group>
+          <Form.Group controlId='petBreed'>
+            <Form.Label>Breed</Form.Label>
+            <PetBreedSelector
+              name='breed' 
+              petType={newPet.type}
+              value={newPet.petBreed}
+              onChange={handleInputChange}
+            />
           </Form.Group>
           <Form.Group controlId='petAge'>
             <Form.Label>Age</Form.Label>
             <Form.Control
               type='number'
               name='age'
-              value={newPet.petAge}
+              value={newPet.age}
               onChange={handleInputChange}
             />
           </Form.Group>

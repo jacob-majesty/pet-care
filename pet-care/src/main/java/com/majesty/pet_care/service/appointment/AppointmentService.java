@@ -2,6 +2,7 @@ package com.majesty.pet_care.service.appointment;
 
 import java.time.LocalDate;
 import java.time.LocalTime;
+import java.time.temporal.ChronoUnit;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -174,6 +175,63 @@ public class AppointmentService implements IAppointmentService {
 
     private String formatAppointmentStatus(AppointmentStatus appointmentStatus) {
         return appointmentStatus.toString().replace("_", "-").toLowerCase();
+    }
+
+    @Override
+    public List<Long> getAppointmentIds() {
+        List<Appointment> appointments = appointmentRepository.findAll();
+        return appointments.stream()
+                .map(Appointment::getId)
+                .collect(Collectors.toList());
+    }
+
+    @Override
+    public void setAppointmentStatus(Long appointmentId) {
+        Appointment appointment = getAppointmentById(appointmentId);
+        LocalDate currentDate = LocalDate.now();
+        LocalTime currentTime = LocalTime.now();
+        LocalTime appointmentEndTime = appointment.getAppointmentTime()
+                .plusMinutes(2).truncatedTo(ChronoUnit.MINUTES);
+
+        switch (appointment.getStatus()) {
+            case APPROVED:
+                if (currentDate.isBefore(appointment.getAppointmentDate()) ||
+                        (currentDate.equals(appointment.getAppointmentDate())
+                                && currentTime.isBefore(appointment.getAppointmentTime()))) {
+                    appointment.setStatus(AppointmentStatus.UP_COMING);
+                    // If already UP_COMING, no change needed.
+                }
+                break;
+
+            case UP_COMING:
+                if (currentDate.equals(appointment.getAppointmentDate()) &&
+                        currentTime.isAfter(appointment.getAppointmentTime())
+                        && !currentTime.isAfter(appointmentEndTime)) {
+                    // Changed to include the end time as part of ON_GOING status
+                    appointment.setStatus(AppointmentStatus.ON_GOING);
+                }
+                break;
+            case ON_GOING:
+                if (currentDate.isAfter(appointment.getAppointmentDate()) ||
+                        (currentDate.equals(appointment.getAppointmentDate())
+                                && !currentTime.isBefore(appointmentEndTime))) {
+                    // Changed to mark as COMPLETED when current time is not before the end time
+                    appointment.setStatus(AppointmentStatus.COMPLETED);
+                }
+                break;
+
+            case WAITING_FOR_APPROVAL:
+                if (currentDate.isAfter(appointment.getAppointmentDate()) ||
+                        (currentDate.equals(appointment.getAppointmentDate())
+                                && currentTime.isAfter(appointment.getAppointmentTime()))) {
+                    // Adjusted to change status to NOT_APPROVED if current time is past the
+                    // appointment time
+                    appointment.setStatus(AppointmentStatus.NOT_APPROVED);
+                }
+                break;
+        }
+        appointmentRepository.save(appointment);
+
     }
 
 }

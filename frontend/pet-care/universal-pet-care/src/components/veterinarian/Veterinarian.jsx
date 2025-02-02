@@ -10,6 +10,7 @@ import AlertMessage from "../common/AlertMessage";
 import RatingStars from "../rating/RatingStars";
 import Rating from "../rating/Rating";
 import Paginator from "../common/Paginator";
+import LoadSpinner from "../common/LoadSpinner";
 
 const Veterinarian = () => {
   const [vet, setVet] = useState(null);
@@ -24,13 +25,13 @@ const Veterinarian = () => {
   const getUser = async () => {
     setIsLoading(true);
     try {
-      console.log("The vetId :", vetId);
       const result = await getUserById(vetId);
-      console.log("The response :", result);
       setVet(result.data);
-      setIsLoading(false);
+      setTimeout(() => {
+         setIsLoading(false);
+      }, 1000)
+     
     } catch (error) {
-      console.error("The error message :", error);
       setErrorMessage(error.response.data.message);
       setShowErrorAlert(true);
       setIsLoading(false);
@@ -41,15 +42,20 @@ const Veterinarian = () => {
     getUser();
   }, [vetId]);
 
-  if (isLoading) {
-    return <h1>Loading...</h1>;
-  }
-
+  const vetReviews = vet?.reviews || [];
   const indexOfLastReview = currentPage * reviewPerPage;
   const indexOfFirstReview = indexOfLastReview - reviewPerPage;
-  const currentReviews = vet.reviews.slice(
-    indexOfFirstReview,
-    indexOfLastReview ) || [];
+  const currentReviews =
+    vetReviews.slice(indexOfFirstReview, indexOfLastReview) || []; 
+  
+    if (isLoading) {
+      return (
+        <div>
+          <LoadSpinner />
+        </div>
+      );
+    }
+  
 
   return (
     <Container className='d-flex justify-content-center align-items-center mt-5'>
@@ -130,8 +136,7 @@ const Veterinarian = () => {
               itemsPerPage={reviewPerPage}
               totalItems={vet.reviews.length}
               paginate={setCurrentPage}
-              currentPage={currentPage}>
-            </Paginator>
+              currentPage={currentPage}></Paginator>
           </Card.Body>
         </Card>
       )}

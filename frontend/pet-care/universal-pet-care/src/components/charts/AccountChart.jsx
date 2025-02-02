@@ -1,17 +1,12 @@
-import React, {useState, useEffect} from 'react'
-import {
-  ResponsiveContainer, 
-  Tooltip, 
-  PieChart,
-  Pie,
-  Cell,
-} from "recharts";
-import { getAggregatedUsersAccountByActiveStatus } from '../user/UserService';
+import React, { useState, useEffect } from "react";
+import { ResponsiveContainer, Tooltip, PieChart, Pie, Cell } from "recharts";
+import { getAggregatedUsersAccountByActiveStatus } from "../user/UserService";
+import NoDataAvailable from "../common/NoDataAvailable";
 
 const AccountChart = () => {
-     const [accountData, setAccountData] = useState([]);
-    const [errorMessage, setErrorMessage] = useState("");
-    
+  const [accountData, setAccountData] = useState([]);
+  const [errorMessage, setErrorMessage] = useState("");
+
   useEffect(() => {
     const getAccountActivity = async () => {
       try {
@@ -52,28 +47,33 @@ const AccountChart = () => {
     getAccountActivity();
   }, []);
 
+  return (
+    <section>
+      {accountData && accountData.length > 0 ? (
+        <React.Fragment>
+          <h5 className='mt-4 chart-title'>Account Activity Overview</h5>
+          <ResponsiveContainer width='80%' height={400}>
+            <PieChart>
+              <Pie
+                data={accountData}
+                dataKey='value'
+                nameKey='name'
+                outerRadius={110}
+                fill='#8884d8'
+                label>
+                {accountData.map((entry, index) => (
+                  <Cell key={`cell-${index}`} fill={entry.color} />
+                ))}
+              </Pie>
+              <Tooltip />
+            </PieChart>
+          </ResponsiveContainer>
+        </React.Fragment>
+      ) : (
+        <NoDataAvailable dataType={" account data "} message={errorMessage} />
+      )}
+    </section>
+  );
+};
 
-   return (
-     <div>
-       <h5 className='mt-4 chart-title'>Account Activity Overview</h5>
-       <ResponsiveContainer width='80%' height={400}>
-         <PieChart>
-           <Pie
-             data={accountData}
-             dataKey='value'
-             nameKey='name'
-             outerRadius={110}
-             fill='#8884d8'
-             label>
-             {accountData.map((entry, index) => (
-               <Cell key={`cell-${index}`} fill={entry.color} />
-             ))}
-           </Pie>
-           <Tooltip />
-         </PieChart>
-       </ResponsiveContainer>
-     </div>
-   );
-}
-
-export default AccountChart
+export default AccountChart;

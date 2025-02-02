@@ -12,6 +12,7 @@ const AdminDashboardSidebar = ({
   onNavigate,
   activeTab,
 }) => {
+  
   return (
     <aside
       id='sidebar'

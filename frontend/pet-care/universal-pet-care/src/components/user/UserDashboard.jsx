@@ -5,17 +5,18 @@ import UserProfile from "./UserProfile";
 import UseMessageAlerts from "../hooks/UseMessageAlerts";
 import { getUserById, deleteUser } from "./UserService";
 import { deleteUserPhoto } from "../modals/ImageUploaderService";
-import AlertMessage from "../common/AlertMessage";
 import Review from "../review/Review";
 import UserAppointments from "../appointment/UserAppointments";
 import CustomPieChart from "../charts/CustomPieChart";
 import { formatAppointmentStatus } from "../utils/utilities";
 import NoDataAvailable from "../common/NoDataAvailable";
+import AlertMessage from "../common/AlertMessage";
+import { logout } from "../auth/AuthService";
 
 const UserDashboard = () => {
   const [user, setUser] = useState(null);
   const [appointments, setAppointments] = useState([]);
-   const [appointmentData, setAppointmentData] = useState([]);  
+  const [appointmentData, setAppointmentData] = useState([]);
   const [activeKey, setActiveKey] = useState(() => {
     const storedActiveKey = localStorage.getItem("activeKey");
     return storedActiveKey ? storedActiveKey : "profile";
@@ -32,16 +33,19 @@ const UserDashboard = () => {
     setShowErrorAlert,
   } = UseMessageAlerts();
 
-  // const { userId } = useParams();
-  const userId = 7;
+  const { userId } = useParams();
+
+  const currentUserId = localStorage.getItem("userId");
+
+  const isCurrentUser = userId === currentUserId;
 
   useEffect(() => {
     const getUser = async () => {
       try {
         const data = await getUserById(userId);
         setUser(data.data);
+        console.log("The user data:", data.data);
         setAppointments(data.data.appointments);
-        console.log("The user data from the dashboard:", data.data);
       } catch (error) {
         setErrorMessage(error.response.data.message);
         setShowErrorAlert(true);
@@ -69,10 +73,8 @@ const UserDashboard = () => {
       const transformedData = Object.values(statusCounts);
       setAppointmentData(transformedData);
       setAppointments(user.appointments);
-      console.log("Here is the transform data: ", transformedData);
     }
   }, [user]);
-
 
   const handleRemovePhoto = async () => {
     try {
@@ -92,10 +94,12 @@ const UserDashboard = () => {
       const response = await deleteUser(userId);
       setSuccessMessage(response.message);
       setShowSuccessAlert(true);
+      setTimeout(() => {
+        logout();
+      }, 10000);
     } catch (error) {
       setErrorMessage(error.message);
       setShowErrorAlert(true);
-      console.error(error.message);
     }
   };
 
@@ -103,32 +107,34 @@ const UserDashboard = () => {
     setActiveKey(key);
     localStorage.setItem("activeKey", key);
   };
-
   return (
     <Container className='mt-2 user-dashboard'>
-      {showErrorAlert && (
-        <AlertMessage type={"danger"} message={errorMessage} />
-      )}
-
-      {showSuccessAlert && (
-        <AlertMessage type={"success"} message={successMessage} />
-      )}
       <Tabs
         className='mb-2'
         justify
         activeKey={activeKey}
         onSelect={handleTabSelect}>
         <Tab eventKey='profile' title={<h3>Profile</h3>}>
-          {user && (
-            <UserProfile
-              user={user}
-              handleRemovePhoto={handleRemovePhoto}
-              handleDeleteAccount={handleDeleteAccount}
-            />
-          )}
+          <Col>
+            {showErrorAlert && (
+              <AlertMessage type={"danger"} message={errorMessage} />
+            )}
+            {showSuccessAlert && (
+              <AlertMessage type={"success"} message={successMessage} />
+            )}
+
+            {user && (
+              <UserProfile
+                user={user}
+                handleRemovePhoto={handleRemovePhoto}
+                handleDeleteAccount={handleDeleteAccount}
+              />
+            )}
+          </Col>
         </Tab>
-        <Tab eventKey='status' title={<h3>Appointments</h3>}>
+        <Tab eventKey='status' title={<h3>Appointments Overview</h3>}>
           <Row>
+            <h4 className='text-center mt-4'>Appointment Overview</h4>
             <Col>
               {appointmentData && appointmentData.length > 0 ? (
                 <CustomPieChart data={appointmentData} />
@@ -139,23 +145,29 @@ const UserDashboard = () => {
           </Row>
         </Tab>
 
-        <Tab eventKey='appointments' title={<h3>Appointment Details</h3>}>
-          <Row>
-            <Col>
-              {user && (
-                <React.Fragment>
-                  {appointments && appointments.length > 0 ? (
-                    <UserAppointments user={user} appointments={appointments} />
-                  ) : (
-                    <NoDataAvailable dataType={"appointment data"} />
-                  )}
-                </React.Fragment>
-              )}
-            </Col>
-          </Row>
-        </Tab>
+        {isCurrentUser && (
+          <Tab eventKey='appointments' title={<h3>Appointment Details</h3>}>
+            {" "}
+            <Row>
+              <Col>
+                {user && (
+                  <React.Fragment>
+                    {appointments && appointments.length > 0 ? (
+                      <UserAppointments
+                        user={user}
+                        appointments={appointments}
+                      />
+                    ) : (
+                      <NoDataAvailable dataType={"appointment data"} />
+                    )}
+                  </React.Fragment>
+                )}
+              </Col>
+            </Row>
+          </Tab>
+        )}
 
-        <Tab eventKey='reviews' title={<h3>Reviews</h3>}>
+        <Tab eventKey='reviews' title={<h3>Reviws</h3>}>
           <Container className='d-flex justify-content-center align-items-center'>
             <Card className='mt-5 mb-4 review-card'>
               <h4 className='text-center mb-2'>Your Reviews</h4>
@@ -164,7 +176,11 @@ const UserDashboard = () => {
                 <Col>
                   {user && user.reviews && user.reviews.length > 0 ? (
                     user.reviews.map((review, index) => (
-                      <Review key={index} review={review} />
+                      <Review
+                        key={index}
+                        review={review}
+                        userType={user.userType}
+                      />
                     ))
                   ) : (
                     <NoDataAvailable dataType={"review data"} />

@@ -6,7 +6,6 @@ import { getAllPetColors } from "./PetService";
 const PetColorSelector = ({ value, onChange }) => {
   const [petColors, setPetColors] = useState([]);
   const [showModal, setShowModal] = useState(false);
-  const[selectedColor, setSelectedColor] = useState("")
 
   useEffect(() => {
     const fetchAllPetColors = async () => {
@@ -25,33 +24,29 @@ const PetColorSelector = ({ value, onChange }) => {
     if (e.target.value === "add-new-item") {
       setShowModal(true);
     } else {
-      setSelectedColor(e.target.value);
-
-    onChange(e);
+     // onChange({ target: { name: "color", value: e.target.value } });
+      onChange(e);
     }
   };
   //2. handle save new item
   const handleSaveNewItem = (newItem) => {
     if (newItem && !petColors.includes(newItem)) {
       setPetColors([...petColors, newItem]);
-      setSelectedColor(newItem)
-      onChange({ target: { name: "petColor", value: newItem } });
+      onChange({ target: { name: "color", value: newItem } });
     }
   };
 
   const handleClose = () => {
     setShowModal(false);
-    setSelectedColor("")
-  }
- 
+  };
 
   return (
     <React.Fragment>
       <Form.Group as={Col} controlId='petColor' className='mb-2'>
         <Form.Control
           as='select'
-          name='petColor'
-          value={selectedColor}
+          name='color'
+          value={value}
           required
           onChange={handleColorChange}>
           <option value=''>...select pet color...</option>

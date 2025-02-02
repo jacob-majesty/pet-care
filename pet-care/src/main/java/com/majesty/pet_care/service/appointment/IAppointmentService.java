@@ -33,4 +33,8 @@ public interface IAppointmentService {
     long countAppointment();
 
     List<Map<String, Object>> getAppointmentSummary();
+
+    List<Long> getAppointmentIds();
+
+    void setAppointmentStatus(Long appointmentId);
 }
