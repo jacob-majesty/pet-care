@@ -9,7 +9,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.majesty.pet_care.dto.UserDto;
 import com.majesty.pet_care.response.ApiResponse;
-import com.majesty.pet_care.service.IPatientService;
+import com.majesty.pet_care.service.patient.IPatientService;
 import com.majesty.pet_care.utils.FeedbackMessage;
 import com.majesty.pet_care.utils.UrlMapping;
 
