@@ -1,9 +1,25 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import d5 from "../../assets/images/d5.jpg";
 import vett from "../../assets/images/vett.jpg";
 import { Col, Row, Button, Card, ListGroup, Container } from "react-bootstrap";
+import VetSlider from "../veterinarian/VetSlider";
+import NoDataAvailable from "../common/NoDataAvailable";
+import { getVeterinarians } from "../veterinarian/VeterinarianService";
 
 const Home = () => {
+  const [vets, setVets] = useState([]);
+  const [errorMessage, setErrorMessage] = useState("");
+
+  useEffect(() => {
+    getVeterinarians()
+      .then((vets) => {
+        setVets(vets.data);
+      })
+      .catch((error) => {
+        setErrorMessage(error.message || "Something went wrong!");
+      });
+  }, []);
+
   return (
     <Container className='home-container mt-5'>
       <Row>
@@ -76,14 +92,19 @@ const Home = () => {
         </Col>
       </Row>
       <div className='card mb-5'>
-        <h4>
+        <h5>
           What people are saying about{" "}
           <span className='text-info'> Universal Pet Care</span> Veterinarians
-        </h4>
+        </h5>
         <hr />
-        <p className='text-center'>
-          Here, we are going to be sliding veterinarians across this area
-        </p>
+        {vets.length > 0 ? (
+          <VetSlider vets={vets} />
+        ) : (
+          <NoDataAvailable
+            dataType='veterinarians data'
+            errorMessage={errorMessage}
+          />
+        )}
       </div>
     </Container>
   );
