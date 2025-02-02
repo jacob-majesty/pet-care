@@ -1,11 +1,20 @@
 import React, { useState } from "react";
 import DeleteConfirmationModal from "../modals/DeleteConfirmationModal";
 import AlertMessage from "../common/AlertMessage";
-import { Button, Table } from "react-bootstrap";
-import { BsPencilFill, BsTrashFill } from "react-icons/bs";
+import AddPetModal from "../modals/AddPetModal";
+import {
+  Button,
+  Table,
+  Row,
+  Col,
+  OverlayTrigger,
+  Tooltip,
+} from "react-bootstrap";
+import { BsPencilFill, BsPlus, BsTrashFill } from "react-icons/bs";
 import UseMessageAlerts from "../hooks/UseMessageAlerts";
 import EditablePetRow from "./EditablePetRow";
-import { updatePet, deletePet } from "./PetService";
+import { updatePet, deletePet, addPet } from "./PetService";
+import { Link } from "react-router-dom";
 
 const PetsTable = ({
   pets,
@@ -17,6 +26,7 @@ const PetsTable = ({
   const [editModeId, setEditModeId] = useState(null);
   const [showDeleteModal, setShowDeleteModal] = useState(false);
   const [petToDelete, setPetToDelete] = useState(null);
+  const [showAddModal, setShowAddModal] = useState(false);
 
   const {
     successMessage,
@@ -70,6 +80,23 @@ const PetsTable = ({
     }
   };
 
+  const handleShowAddPetModal = () => {   
+    setShowAddModal(true);
+  };
+
+  const handleAddPet = async (appointmentId, newPet) => {
+    try {         
+      const response = await addPet(appointmentId, newPet);
+      onPetsUpdate(appointmentId);
+      setSuccessMessage(response.message);
+      setShowAddModal(false);
+      setShowSuccessAlert(true);
+    } catch (error) {   
+      setErrorMessage(error.message);
+      setShowErrorAlert(true);
+    }
+  };
+
   return (
     <section>
       <DeleteConfirmationModal
@@ -78,10 +105,40 @@ const PetsTable = ({
         onConfirm={handleDeletePet}
         itemToDelete='pet'
       />
+
+      {showAddModal && (
+        <AddPetModal
+          show={showAddModal}
+          onHide={() => setShowAddModal(false)}
+          onAddPet={handleAddPet}
+          appointmentId={appointmentId}
+        />
+      )}
       {showErrorAlert && <AlertMessage type='danger' message={errorMessage} />}
       {showSuccessAlert && (
         <AlertMessage type='success' message={successMessage} />
       )}
+      <Row>
+        <Col>
+          <h4>Pets:</h4>
+        </Col>
+        <Col className='d-flex justify-content-end'>
+          <OverlayTrigger
+            overlay={
+              <Tooltip id={`tooltip-view-${appointmentId}`}>Add Pet</Tooltip>
+            }>
+            <Link
+              to={"#"}
+              className='text-info'
+              onClick={() => handleShowAddPetModal(appointmentId)}>
+              <h2>
+                {" "}
+                <BsPlus />
+              </h2>
+            </Link>
+          </OverlayTrigger>
+        </Col>
+      </Row>
 
       <Table striped bordered hover size='sm'>
         <thead>
@@ -123,14 +180,16 @@ const PetsTable = ({
                           <BsPencilFill />
                         </Button>
                       </td>
-                      <td>
-                        <Button
-                          className='btn btn-sm btn-danger'
-                          disabled={!isEditable}
-                          onClick={() => handleShowDeleteModal(pet.id)}>
-                          <BsTrashFill />
-                        </Button>
-                      </td>
+                      {pets && pets.length > 1 && (
+                        <td>
+                          <Button
+                            className='btn btn-sm btn-danger'
+                            disabled={!isEditable}
+                            onClick={() => handleShowDeleteModal(pet.id)}>
+                            <BsTrashFill />
+                          </Button>
+                        </td>
+                      )}
                     </React.Fragment>
                   )}
                 </tr>
@@ -143,34 +202,3 @@ const PetsTable = ({
 };
 
 export default PetsTable;
-
-
-//1. Add functionality to add new pets to the appointment after booking.
-// Hints:
-  
-/* 
-a:  You might want to add a modal to popup AND recieve the 
-inputs when the add button is cliked.
-
-
-b: You might want to add a new empty table row bellow to accept the
- inputs when the add button is clicked.
- 
-  */
-
- /* ============================================================================== */
- 
- //2. Edit the deletePet method / function to check the number
-// of pets associated with the appointment befor deletion.
- 
-// The user should not be allowed to delete pet if there is only
-//one pet associated with the appointment
-
-//Hints:
-
-/* 
-a: You might want to do the check at the backend and return the appropriate
- message when the contion is not met. or you might want to do it at the frontend
-  and hide the delete button if the delete condition is not met
-
-*/
