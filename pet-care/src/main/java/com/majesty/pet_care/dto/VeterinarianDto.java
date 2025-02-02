@@ -4,6 +4,7 @@ import lombok.Data;
 
 @Data
 public class VeterinarianDto {
+    private Long veterinarianId;
     private String firstName;
     private String lastName;
     private String email;

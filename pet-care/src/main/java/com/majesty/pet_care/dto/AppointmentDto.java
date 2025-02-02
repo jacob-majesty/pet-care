@@ -11,15 +11,15 @@ import lombok.Data;
 @Data
 public class AppointmentDto {
 
-    private long id;
+    private Long id;
     private LocalDate appointmentDate;
     private LocalTime appointmentTime;
     private LocalDate createdAt;
     private String reason;
     private AppointmentStatus status;
-    private UserDto patient;
-    private UserDto veterinarian;
     private String appointmentNo;
+    private PatientDto patient;
+    private VeterinarianDto veterinarian;
     private List<PetDto> pets;
 
 }
