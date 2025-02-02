@@ -5,14 +5,17 @@ import java.util.List;
 import com.majesty.pet_care.model.Pet;
 
 public interface IPetService {
-
     List<Pet> savePetsForAppointment(List<Pet> pets);
 
-    Pet updatePet(Pet pet, long petId);
+    List<Pet> savePetsForAppointment(Long appointmentId, List<Pet> pets);
 
-    void deletePet(long petId);
+    // List<Pet> savePetsForAppointment(Appointment appointment, List<Pet> pets);
 
-    Pet getPetById(long petId);
+    Pet updatePet(Pet pet, Long id);
+
+    void deletePet(Long id);
+
+    Pet getPetById(Long id);
 
     List<String> getPetTypes();
 
