@@ -2,13 +2,14 @@ package com.majesty.pet_care.dto;
 
 import java.time.LocalDate;
 import java.util.List;
+import java.util.Set;
 
 import lombok.Data;
 
 @Data
 public class UserDto {
 
-    private long id;
+    private Long id;
     private String firstName;
     private String lastName;
     private String gender;
@@ -23,6 +24,7 @@ public class UserDto {
     private long photoId;
     private byte[] photo;
     private double averageRating;
+    private Set<String> roles;
     private Long totalReviewers;
 
 }

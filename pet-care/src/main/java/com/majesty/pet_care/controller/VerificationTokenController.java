@@ -18,7 +18,6 @@ import com.majesty.pet_care.response.ApiResponse;
 import com.majesty.pet_care.service.token.IVerificationTokenService;
 import com.majesty.pet_care.utils.FeedbackMessage;
 import com.majesty.pet_care.utils.UrlMapping;
-
 import lombok.RequiredArgsConstructor;
 
 @RestController

@@ -5,15 +5,17 @@ public class UrlMapping {
     public static final String API = "/api/v1";
     public static final String USERS = API + "/users";
     public static final String REGISTER_USER = "/register";
-    public static final String UPDATE_USER = "/update/{userId}";
-    public static final String FOUND = "Found";
-    public static final String GET_USER_BY_ID = "user/{userId}";
-    public static final String DELETE_USER_BY_ID = "/delete/{userId}";
+    public static final String UPDATE_USER = "/user/{userId}/update";
+    public static final String GET_USER_BY_ID = "/user/{userId}";
+    public static final String DELETE_USER_BY_ID = "/user/{userId}/delete";
     public static final String GET_ALL_USERS = "/all-users";
+    public static final String AGGREGATE_BY_STATUS = "/account/aggregated-by-status";
+    public static final String LOCK_USER_ACCOUNT = "/account/{userId}/lock-user-account";
+    public static final String UNLOCK_USER_ACCOUNT = "/account/{userId}/unLock-user-account";
 
-    public static final String Count_All_USERS = "/count/users";
-    public static final String Count_All_VETS = "/count/veterinarians";
-    public static final String Count_All_PATIENTS = "/count/patients";
+    public static final String COUNT_ALL_USERS = "/count/users";
+    public static final String COUNT_ALL_VETS = "/count/veterinarians";
+    public static final String COUNT_ALL_PATIENTS = "/count/patients";
     public static final String AGGREGATE_USERS = "/aggregated-users";
 
     /* Appointment API */
@@ -28,6 +30,7 @@ public class UrlMapping {
     public static final String APPROVE_APPOINTMENT = "/appointment/{id}/approve";
     public static final String DECLINE_APPOINTMENT = "/appointment/{id}/decline";
     public static final String COUNT_APPOINTMENT = "/count/appointments";
+    public static final String GET_APPOINTMENT_SUMMARY = "/summary/appointments-summary";
 
     /* Pet API */
     public static final String PETS = API + "/pets";

@@ -32,9 +32,6 @@ import com.majesty.pet_care.service.pet.IPetService;
 import com.majesty.pet_care.service.photo.PhotoService;
 import com.majesty.pet_care.service.review.ReviewService;
 import com.majesty.pet_care.utils.FeedbackMessage;
-import com.majesty.pet_care.dto.ReviewDto;
-import com.majesty.pet_care.dto.UserDto;
-
 import lombok.RequiredArgsConstructor;
 
 @Service
