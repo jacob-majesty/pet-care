@@ -6,7 +6,6 @@ import java.util.Map;
 import org.apache.catalina.connector.Response;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -29,10 +28,8 @@ import com.majesty.pet_care.service.password.IChangePasswordService;
 import com.majesty.pet_care.service.user.UserService;
 import com.majesty.pet_care.utils.FeedbackMessage;
 import com.majesty.pet_care.utils.UrlMapping;
-
 import lombok.RequiredArgsConstructor;
 
-@CrossOrigin("http://localhost:5173")
 @RequestMapping(UrlMapping.USERS)
 @RestController
 @RequiredArgsConstructor

@@ -5,7 +5,6 @@ import java.sql.SQLException;
 
 import org.apache.catalina.connector.Response;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -27,7 +26,6 @@ import com.majesty.pet_care.utils.FeedbackMessage;
 import lombok.RequiredArgsConstructor;
 
 @RestController
-@CrossOrigin("http://localhost:5173")
 @RequestMapping(UrlMapping.PHOTOS)
 @RequiredArgsConstructor
 public class PhotoController {

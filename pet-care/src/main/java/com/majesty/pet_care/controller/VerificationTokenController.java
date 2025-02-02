@@ -1,7 +1,6 @@
 package com.majesty.pet_care.controller;
 
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -19,10 +18,8 @@ import com.majesty.pet_care.response.ApiResponse;
 import com.majesty.pet_care.service.token.IVerificationTokenService;
 import com.majesty.pet_care.utils.FeedbackMessage;
 import com.majesty.pet_care.utils.UrlMapping;
-
 import lombok.RequiredArgsConstructor;
 
-@CrossOrigin("http://localhost:5173")
 @RestController
 @RequiredArgsConstructor
 @RequestMapping(UrlMapping.TOKEN_VERIFICATION)

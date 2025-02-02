@@ -24,10 +24,8 @@ import com.majesty.pet_care.utils.UrlMapping;
 import com.majesty.pet_care.dto.ReviewDto;
 import com.majesty.pet_care.exception.AlreadyExistsException;
 import com.majesty.pet_care.exception.ResourceNotFoundException;
-
 import lombok.RequiredArgsConstructor;
 
-@CrossOrigin("http://localhost:5173")
 @RequiredArgsConstructor
 @RequestMapping(UrlMapping.REVIEWS)
 @RestController
