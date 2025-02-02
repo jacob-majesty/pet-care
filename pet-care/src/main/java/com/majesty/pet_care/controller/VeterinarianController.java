@@ -29,7 +29,6 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class VeterinarianController {
     private final IVeterinarianService veterinarianService;
-    private final IAppointmentService appointmentService;
 
     @GetMapping(UrlMapping.GET_ALL_VETERINARIANS)
     public ResponseEntity<ApiResponse> getAllVeterinarians() {

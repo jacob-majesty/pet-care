@@ -174,7 +174,7 @@ public class AppointmentController {
         return appointmentService.countAppointment();
     }
 
-    @GetMapping("/summary/appointments-summary")
+    @GetMapping(UrlMapping.GET_APPOINTMENT_SUMMARY)
     public ResponseEntity<ApiResponse> getAppointmentSummary() {
         try {
             List<Map<String, Object>> summary = appointmentService.getAppointmentSummary();

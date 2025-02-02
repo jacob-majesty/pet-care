@@ -131,17 +131,17 @@ public class UserController {
         }
     }
 
-    @GetMapping(UrlMapping.Count_All_VETS)
+    @GetMapping(UrlMapping.COUNT_ALL_VETS)
     public long countVeterinarians() {
         return userService.countVeterinarians();
     }
 
-    @GetMapping(UrlMapping.Count_All_PATIENTS)
+    @GetMapping(UrlMapping.COUNT_ALL_PATIENTS)
     public long countPatients() {
         return userService.countPatients();
     }
 
-    @GetMapping(UrlMapping.Count_All_USERS)
+    @GetMapping(UrlMapping.COUNT_ALL_USERS)
     public long countUsers() {
         return userService.countAllUsers();
     }
@@ -156,7 +156,7 @@ public class UserController {
         }
     }
 
-    @GetMapping("/account/aggregated-by-status")
+    @GetMapping(UrlMapping.AGGREGATE_BY_STATUS)
     public ResponseEntity<ApiResponse> getAggregatedUsersByEnabledStatus() {
         try {
             Map<String, Map<String, Long>> aggregatedData = userService.aggregateUsersByEnabledStatusAndType();
@@ -166,7 +166,7 @@ public class UserController {
         }
     }
 
-    @PutMapping("/account/{userId}/lock-user-account")
+    @PutMapping(UrlMapping.LOCK_USER_ACCOUNT)
     public ResponseEntity<ApiResponse> lockUserAccount(@PathVariable Long userId) {
         try {
             userService.lockUserAccount(userId);
@@ -176,7 +176,7 @@ public class UserController {
         }
     }
 
-    @PutMapping("/account/{userId}/unLock-user-account")
+    @PutMapping(UrlMapping.UNLOCK_USER_ACCOUNT)
     public ResponseEntity<ApiResponse> unLockUserAccount(@PathVariable Long userId) {
         try {
             userService.unLockUserAccount(userId);
