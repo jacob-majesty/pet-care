@@ -13,7 +13,9 @@ const UserProfile = ({ user, handleRemovePhoto, handleDeleteAccount }) => {
   const [showDeleteModal, setShowDeleteModal] = useState(false);
   const [userToDelete, setUserToDelete] = useState(null);
 
-  // const navigate = useNavigate();
+  const currentUserId = localStorage.getItem("userId");
+
+  const isCurrentUser = user.id == currentUserId;
 
   const handleShowImageUploaderModal = () => {
     setShowImageUploaderModal(true);
@@ -62,40 +64,65 @@ const UserProfile = ({ user, handleRemovePhoto, handleDeleteAccount }) => {
               <Card.Body>
                 <UserImage userId={user.id} userPhoto={user.photo} />
               </Card.Body>
-              <div className='text-center'>
-                <p>
-                  {" "}
-                  <Link to={"#"} onClick={handleShowImageUploaderModal}>
-                    Update Photo
-                  </Link>
-                </p>
 
-                <ImageUploaderModal
-                  userId={user.id}
-                  show={showImageUploaderModal}
-                  handleClose={handleCloseImageUploaderModal}
-                />
-                <p>
-                  {" "}
-                  <Link to={"#"} onClick={handleRemovePhoto}>
-                    Remove Photo
-                  </Link>
-                </p>
+              {isCurrentUser && (
+                <div className='text-center'>
+                  <p>
+                    {" "}
+                    <Link to={"#"} onClick={handleShowImageUploaderModal}>
+                      Update Photo
+                    </Link>
+                  </p>
 
-                <p>
-                  {" "}
-                  <Link to={"#"} onClick={handleShowChangePasswordModal}>
-                    Change Password
-                  </Link>
-                </p>
+                  <ImageUploaderModal
+                    userId={user.id}
+                    show={showImageUploaderModal}
+                    handleClose={handleCloseImageUploaderModal}
+                  />
+                  <p>
+                    {" "}
+                    <Link to={"#"} onClick={handleRemovePhoto}>
+                      Remove Photo
+                    </Link>
+                  </p>
 
-                <ChangePasswordModal
-                  userId={user.id}
-                  show={showChangePasswordModal}
-                  handleClose={handleCloseChangePasswordModal}
-                />
-              </div>
+                  <p>
+                    {" "}
+                    <Link to={"#"} onClick={handleShowChangePasswordModal}>
+                      Change Password
+                    </Link>
+                  </p>
+
+                  <ChangePasswordModal
+                    userId={user.id}
+                    show={showChangePasswordModal}
+                    handleClose={handleCloseChangePasswordModal}
+                  />
+                </div>
+              )}
             </Card>
+
+            {isCurrentUser && (
+              <Card.Body>
+                <div className='d-flex justify-content-center mb-4'>
+                  <div className='mx-2'>
+                    <Link
+                      to={`/update-user/${user.id}/update`}
+                      className='btn btn-warning btn-sm'>
+                      Edit profile
+                    </Link>
+                  </div>
+                  <div className='mx-2'>
+                    <Button
+                      variant='danger'
+                      size='sm'
+                      onClick={handleShowDeleteModal}>
+                      Close account
+                    </Button>
+                  </div>
+                </div>
+              </Card.Body>
+            )}
           </Col>
 
           <Col md={8}>
@@ -177,26 +204,6 @@ const UserProfile = ({ user, handleRemovePhoto, handleDeleteAccount }) => {
                 </Col>
               </Card.Body>
             </Card>
-
-            <Card.Body>
-              <div className='d-flex justify-content-center mb-4'>
-                <div className='mx-2'>
-                  <Link
-                    to={`/update-user/${user.id}/update`}
-                    className='btn btn-warning btn-sm'>
-                    Edit profile
-                  </Link>
-                </div>
-                <div className='mx-2'>
-                  <Button
-                    variant='danger'
-                    size='sm'
-                    onClick={handleShowDeleteModal}>
-                    Close account
-                  </Button>
-                </div>
-              </div>
-            </Card.Body>
           </Col>
         </Row>
       </React.Fragment>
