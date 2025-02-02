@@ -13,7 +13,6 @@ import com.majesty.pet_care.dto.EntityConverter;
 import com.majesty.pet_care.dto.UserDto;
 import com.majesty.pet_care.exception.ResourceNotFoundException;
 import com.majesty.pet_care.model.Appointment;
-import com.majesty.pet_care.model.User;
 import com.majesty.pet_care.model.Veterinarian;
 import com.majesty.pet_care.repository.AppointmentRepository;
 import com.majesty.pet_care.repository.ReviewRepository;
