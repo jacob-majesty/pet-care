@@ -11,7 +11,7 @@ import {
   Cell,
 } from "recharts";
 import { aggregateVetBySpecialization } from "../user/UserService";
-
+import NoDataAvailable from "../common/NoDataAvailable";
 
 const VetSpecializationChart = () => {
   const [vetSpecialization, setVetSpecialization] = useState([]);
@@ -35,43 +35,60 @@ const VetSpecializationChart = () => {
   }, []);
 
   return (
-    <ResponsiveContainer width={"80%"} height={400}>
-      <h5 className='mb-4 mt-4 chart-title'>
-        Veterinarians by Specializations
-      </h5>
-      <BarChart data={vetSpecialization}>
-        <XAxis
-          dataKey='specialization'
-          angle={-30}
-          textAnchor='end'
-          height={70}
-        />
-        <YAxis />
+    <section>
+      {setVetSpecialization && vetSpecialization.length > 0 ? (
 
-        <Tooltip
-          content={(props) => {
-            const { payload } = props;
-            if (payload && payload.length) {
-              return (
-                <div style={{ backgroundColor: "#aab5b0" }} className='p-4'>
-                  <p className='text-primary'>
-                    {payload[0].payload.specialization}:{" "}
-                    {payload[0].payload.count}
-                  </p>
-                </div>
-              );
-            }
-            return null;
-          }}
+        <React.Fragment>
+          <ResponsiveContainer width={"80%"} height={400}>
+            <h5 className='mb-4 mt-4 chart-title'>
+              Veterinarians by Specializations
+            </h5>
+            <BarChart data={vetSpecialization}>
+              <XAxis
+                dataKey='specialization'
+                angle={-30}
+                textAnchor='end'
+                height={70}
+              />
+              <YAxis />
+
+              <Tooltip
+                content={(props) => {
+                  const { payload } = props;
+                  if (payload && payload.length) {
+                    return (
+                      <div
+                        style={{ backgroundColor: "#aab5b0" }}
+                        className='p-4'>
+                        <p className='text-primary'>
+                          {payload[0].payload.specialization}:{" "}
+                          {payload[0].payload.count}
+                        </p>
+                      </div>
+                    );
+                  }
+                  return null;
+                }}
+              />
+              <Legend layout='vertical' />
+              <Bar dataKey='count' fill='#8884d8'>
+                {vetSpecialization.map((entry, index) => (
+                  <Cell key={`cell-${index}`} fill={entry.color} />
+                ))}
+              </Bar>
+            </BarChart>
+          </ResponsiveContainer>
+        </React.Fragment>
+
+
+        
+      ) : (
+        <NoDataAvailable
+          dataType={" vet specialization data "}
+          message={errorMessage}
         />
-        <Legend layout='vertical' />
-        <Bar dataKey='count' fill='#8884d8'>
-          {vetSpecialization.map((entry, index) => (
-            <Cell key={`cell-${index}`} fill={entry.color} />
-          ))}
-        </Bar>
-      </BarChart>
-    </ResponsiveContainer>
+      )}
+    </section>
   );
 };
 
