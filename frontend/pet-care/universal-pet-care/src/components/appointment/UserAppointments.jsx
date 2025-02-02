@@ -24,6 +24,7 @@ import Paginator from "../common/Paginator";
 
 const UserAppointments = ({ user, appointments: initialAppointments }) => {
   const [appointments, setAppointments] = useState(initialAppointments);
+  const [isProcessing, setIsProcessing] = useState(false);
 
   const [selectedStatus, setSelectedStatus] = useState("");
   const [filteredAppointments, setFilteredAppointments] = useState([]);
@@ -41,13 +42,10 @@ const UserAppointments = ({ user, appointments: initialAppointments }) => {
     setShowSuccessAlert,
     showErrorAlert,
     setShowErrorAlert,
-  } = UseMessageAlerts();
-
-  const { recipientId } = useParams();
+  } = UseMessageAlerts();  
 
   const fetchAppointment = async (appointmentId) => {
     try {
-      console.log("The appointment Id :", appointmentId);
       const response = await getAppointmentById(appointmentId);
       const updatedAppointment = response.data;
       setAppointments(
@@ -74,43 +72,38 @@ const UserAppointments = ({ user, appointments: initialAppointments }) => {
     }
   };
 
-  // For Vets:
-
-  // Aprrove Appointment.
   const handleDeclineAppointment = async (appointmentId) => {
     try {
       const response = await declineAppointment(appointmentId);
-      console.log("The cancellation response: ", response);
       setSuccessMessage(response.message);
+      setShowErrorAlert(false);
       setShowSuccessAlert(true);
     } catch (error) {
-      console.log("The decline error: ", error);
       setErrorMessage(error.response.data.message);
+      setShowSuccessAlert(false);
       setShowErrorAlert(true);
     }
   };
 
-  //Decline Appointment
   const handleApproveAppointment = async (appointmentId) => {
+    setIsProcessing(true);
     try {
       const response = await approveAppointment(appointmentId);
-      console.log("The cancellation response: ", response);
       setSuccessMessage(response.message);
+      setShowErrorAlert(false);
       setShowSuccessAlert(true);
+      setIsProcessing(false);
     } catch (error) {
-      console.log("The decline error: ", error);
       setErrorMessage(error.response.data.message);
+      setIsProcessing(false);
+      setShowSuccessAlert(false);
       setShowErrorAlert(true);
     }
   };
-
-  //Patients:
-  // Cancel Appointment
 
   const handleCancelAppointment = async (id) => {
     try {
       const response = await cancelAppointment(id);
-      console.log("The cancellation response: ", response);
       setSuccessMessage(response.message);
       setShowSuccessAlert(true);
     } catch (error) {
@@ -119,7 +112,6 @@ const UserAppointments = ({ user, appointments: initialAppointments }) => {
     }
   };
 
-  //Update Appointment
   const handleUpdateAppointment = async (updatedAppointment) => {
     try {
       const result = await updateAppointment(
@@ -133,7 +125,6 @@ const UserAppointments = ({ user, appointments: initialAppointments }) => {
             : appointment
         )
       );
-      console.log("The result from update :", result);
       setSuccessMessage(result.data.message);
       setShowSuccessAlert(true);
     } catch (error) {
@@ -172,13 +163,6 @@ const UserAppointments = ({ user, appointments: initialAppointments }) => {
 
   return (
     <Container className='p-3'>
-      {showSuccessAlert && (
-        <AlertMessage type={"success"} message={successMessage} />
-      )}
-      {showErrorAlert && (
-        <AlertMessage type={"danger"} message={errorMessage} />
-      )}
-
       <AppointmentFilter
         onClearFilters={handleClearFilter}
         statuses={statuses}
@@ -193,7 +177,8 @@ const UserAppointments = ({ user, appointments: initialAppointments }) => {
 
           const isWaitingForApproval =
             formattedStatus === "waiting-for-approval";
-          const isApproved = formattedStatus === "approved";
+          const isCancelled = formattedStatus === "cancelled";
+          const recipientId = appointment.veterinarian.veterinarianId;
 
           return (
             <Accordion.Item eventKey={index} key={index} className='mb-4'>
@@ -242,7 +227,6 @@ const UserAppointments = ({ user, appointments: initialAppointments }) => {
                   </Col>
 
                   <Col md={8} className='mt-2'>
-                    <h4>Pets:</h4>
                     <PetsTable
                       pets={appointment.pets}
                       onPetsUpdate={handlePetsUpdate}
@@ -251,16 +235,25 @@ const UserAppointments = ({ user, appointments: initialAppointments }) => {
                       appointmentId={appointment.id}
                     />
                   </Col>
-
-                  {isApproved && (
+                  {!(isCancelled || isWaitingForApproval) && (
                     <UserInformation
                       userType={user.userType}
                       appointment={appointment}
                     />
                   )}
                 </Row>
+
+                {showErrorAlert && (
+                  <AlertMessage type={"danger"} message={errorMessage} />
+                )}
+
+                {showSuccessAlert && (
+                  <AlertMessage type={"success"} message={successMessage} />
+                )}
+
                 {user.userType === UserType.PATIENT && (
-                  <Link to={`/book-appoitnemnt/${recipientId}/new-appointmnet`}>
+                  <Link
+                    to={`/book-appointment/${recipientId}/new-appointment`}>
                     Book New Apppointment
                   </Link>
                 )}
@@ -303,5 +296,3 @@ const UserAppointments = ({ user, appointments: initialAppointments }) => {
 };
 
 export default UserAppointments;
-
-
